@@ -7,14 +7,14 @@
 
 {% block content %}
 <div class="profile-app">
-    {% include 'profile/head.html' %}
+    {% include 'core/profile/head.html' %}
     
     <div class="profile-app-container">
-        {% include 'profile/sidebar.html' %}
+        {% include 'core/profile/sidebar.html' %}
         
         <main class="profile-main-content">
             {% block profile_content %}
-                {% include 'profile/main_content.html' %}
+                {% include 'core/profile/main_content.html' %}
             {% endblock %}
         </main>
     </div>

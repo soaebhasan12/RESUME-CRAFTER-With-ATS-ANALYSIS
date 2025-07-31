@@ -1,7 +1,7 @@
 <div id="cvs-section" class="profile-section">
     <div class="cv-header">
         <h2 class="section-title">My CVs</h2>
-        <a href="{% url 'User_Personal_Detail' %}" class="btn btn-primary">
+        <a href="{% url 'resumes:resume_list' %}" class="btn btn-primary">
             <i class="fas fa-plus me-2"></i> Create New CV
         </a>
     </div>
@@ -40,7 +40,7 @@
         <i class="fas fa-file-alt"></i>
         <h4>No CVs Found</h4>
         <p>You haven't created any CVs yet. Get started by creating your first professional CV.</p>
-        <a href="{% url 'User_Personal_Detail' %}" class="empty-state-btn">
+        <a href="{% url 'resumes:create_resume' %}" class="empty-state-btn">
             <i class="fas fa-plus me-2"></i> Create Your First CV
         </a>
     </div>
