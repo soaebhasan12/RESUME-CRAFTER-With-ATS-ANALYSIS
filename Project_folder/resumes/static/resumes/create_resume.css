@@ -1,0 +1,110 @@
+        .resume-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            gap: 30px;
+        }
+        
+        .resume-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .resume-column {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .resume-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .resume-header h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .resume-list {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 20px;
+            height: 100%;
+        }
+        
+        .resume-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .resume-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .resume-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .resume-list li::after {
+            content: "+";
+            position: absolute;
+            right: 10px;
+            font-size: 18px;
+            color: #666;
+            transition: transform 0.3s;
+        }
+        
+        .resume-list li.active::after {
+            content: "-";
+        }
+        
+        .section-content {
+            display: none;
+            padding: 15px;
+            background-color: #fff;
+            margin-top: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .template-section {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .template-divider {
+            border-top: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        
+        .template-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .resume-name {
+            text-align: center;
+            font-size: 22px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .resume-columns {
+                flex-direction: column;
+            }
+            
+            .resume-column {
+                min-width: 100%;
+            }
+        }

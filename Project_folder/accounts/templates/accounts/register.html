@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Register - CV Crafter {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'accounts/register.css' %}?v=1.2">
+{% endblock extra_css %}
+
+
+{% block body_class %}register-page{% endblock %}
+
+{% block content %}
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h2>Create Your Account</h2>
+      <p>Join thousands of professionals who found their dream jobs</p>
+    </div>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form class="register-form" method="post" action="{% url 'accounts:register' %}">
+        {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Choose a username" required>
+                <i class="fas fa-user"></i>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <i class="fas fa-envelope"></i>
+            </div>
+            
+            <div class="form-group">
+                <label for="password1">Password</label>
+                <input type="password" id="password1" name="password1" placeholder="Create a password" required>
+                <i class="fas fa-lock"></i>
+            </div>
+            
+            <div class="form-group">
+                <label for="password2">Confirm Password</label>
+                <input type="password" id="password2" name="password2" placeholder="Repeat your password" required>
+                <i class="fas fa-lock"></i>
+            </div>
+            
+            <div class="form-group terms">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+            </div>
+            
+            <button type="submit" class="register-btn">
+                <i class="fas fa-user-plus"></i> Sign Up
+            </button>
+            
+            <div class="register-footer">
+                <p>Already have an account? <a href="{% url 'accounts:login' %}">Sign In</a></p>
+            </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

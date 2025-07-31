@@ -1,0 +1,165 @@
+/* Modern Login Styles */
+:root {
+  --primary-color: #4361ee;
+  --secondary-color: #3a0ca3;
+  --accent-color: #4cc9f0;
+  --background-color: #f8f9ff;
+  --form-bg: #ffffff;
+  --text-color: #2b2d42;
+  --light-text: #8d99ae;
+  --border-color: #e2e8f0;
+}
+
+/* Base Layout */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-color);
+    padding: 2rem;
+}
+
+/* Card Styling */
+.login-card {
+    background: var(--form-bg);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(67, 97, 238, 0.1);
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem;
+    border: 1px solid var(--border-color);
+}
+
+/* Header */
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-header p {
+    color: var(--light-text);
+    font-size: 1rem;
+}
+
+/* Form Elements */
+.login-form .form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.login-form .form-group label {
+    display: block;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.login-form .form-group input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 2.8rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.login-form .form-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    outline: none;
+}
+
+.login-form .form-group i {
+    position: absolute;
+    left: 1rem;
+    top: 3.1rem;
+    color: var(--light-text);
+    font-size: 1rem;
+}
+
+/* Buttons - Specific to login form */
+.login-form .login-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.login-form .login-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+}
+
+/* Footer Links */
+.login-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.login-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.login-footer a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 1.5rem;
+    }
+    
+    .login-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .login-form .form-group input {
+        padding: 0.9rem 0.9rem 0.9rem 2.5rem;
+    }
+    
+    .login-form .form-group i {
+        top: 2.8rem;
+    }
+}
+
+/* Register Button Fix */
+.register-btn {
+    background-color: var(--secondary-color) !important;
+    border: none !important;
+    color: white !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    margin-left: 0.5rem !important;
+}
+
+.register-btn:hover {
+    background-color: var(--primary-color) !important;
+    transform: translateY(-1px) !important;
+}

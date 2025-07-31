@@ -1,0 +1,48 @@
+<div id="cvs-section" class="profile-section">
+    <div class="cv-header">
+        <h2 class="section-title">My CVs</h2>
+        <a href="{% url 'User_Personal_Detail' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i> Create New CV
+        </a>
+    </div>
+
+    {% if cvs %}
+    <div class="cv-grid">
+        {% for cv in cvs %}
+        <div class="cv-card" data-cv-id="{{ cv.id }}">
+            <div class="cv-preview">
+                <img src="{{ cv.template.thumbnail.url }}" alt="{{ cv.title }}">
+                <div class="cv-badge">{{ cv.template.name }}</div>
+            </div>
+            <div class="cv-info">
+                <h5 class="cv-title">{{ cv.title }}</h5>
+                <div class="cv-meta">
+                    <i class="far fa-clock"></i> Last modified: {{ cv.last_updated|date:"M d, Y" }}
+                </div>
+                <div class="cv-actions">
+                    <a href="{% url 'edit_cv' cv.id %}" class="btn btn-sm btn-outline-primary" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="{% url 'download_cv' cv.id %}" class="btn btn-sm btn-outline-success" title="Download">
+                        <i class="fas fa-download"></i>
+                    </a>
+                    <button class="btn btn-sm btn-outline-danger delete-cv" title="Delete" 
+                            data-bs-toggle="modal" data-bs-target="#deleteModal{{ cv.id }}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-file-alt"></i>
+        <h4>No CVs Found</h4>
+        <p>You haven't created any CVs yet. Get started by creating your first professional CV.</p>
+        <a href="{% url 'User_Personal_Detail' %}" class="empty-state-btn">
+            <i class="fas fa-plus me-2"></i> Create Your First CV
+        </a>
+    </div>
+    {% endif %}
+</div>

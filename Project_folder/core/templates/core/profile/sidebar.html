@@ -1,0 +1,48 @@
+<div class="profile-sidebar">
+    <div class="profile-card">
+        <div class="profile-picture-container">
+            <img src="{{ profile.get_profile_picture }}" class="profile-picture" alt="Profile Picture">
+            <button class="profile-pic-upload" onclick="document.getElementById('profileUpload').click()">
+                <i class="fas fa-camera"></i>
+            </button>
+            <input type="file" id="profileUpload" class="d-none" accept="image/*">
+        </div>
+        
+        <h3 class="profile-name">{{ profile.get_full_name }}</h3>
+        <p class="profile-title">{{ profile.professional_title|default:"Professional" }}</p>
+        
+        <div class="profile-stats">
+            <div class="stat-item">
+                <span class="stat-number">{{ cv_count }}</span>
+                <span class="stat-label">CVs</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ profile.personal_details.nationality|default:"-" }}</span>
+                <span class="stat-label">Nationality</span>
+            </div>
+        </div>
+    </div>
+    
+    <ul class="profile-menu">
+        <li>
+            <a href="#" class="active" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="#" data-section="cvs">
+                <i class="fas fa-file-alt"></i> My CVs
+            </a>
+        </li>
+        <li>
+            <a href="#" data-section="settings">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'LogOut' %}">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </li>
+    </ul>
+</div>

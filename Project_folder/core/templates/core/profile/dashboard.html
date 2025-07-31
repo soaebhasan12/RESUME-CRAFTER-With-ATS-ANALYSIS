@@ -1,0 +1,60 @@
+<div id="dashboard-section" class="profile-section">
+    <h2 class="section-title">Dashboard</h2>
+    
+    <div class="welcome-banner">
+        <h3>Welcome back, {{ user.first_name }}!</h3>
+        <p>You have {{ cv_count }} CV{% if cv_count != 1 %}s{% endif %} in your portfolio.</p>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h5>Profile Completeness</h5>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 75%"></div>
+            </div>
+            <p class="text-muted small">Complete your profile to increase visibility</p>
+            <a href="#" class="btn btn-sm btn-outline-primary mt-2">Complete Profile</a>
+        </div>
+        
+        <div class="stat-card">
+            <h5>CV Statistics</h5>
+            <div class="d-flex justify-content-between">
+                <div class="text-center">
+                    <div class="stat-value">{{ cv_count }}</div>
+                    <div class="text-muted small">Total CVs</div>
+                </div>
+                <div class="text-center">
+                    <div class="stat-value">3</div>
+                    <div class="text-muted small">Templates</div>
+                </div>
+                <div class="text-center">
+                    <div class="stat-value">12</div>
+                    <div class="text-muted small">Downloads</div>
+                </div>
+            </div>
+            <a href="#" class="btn btn-sm btn-outline-primary mt-3">View All CVs</a>
+        </div>
+    </div>
+    
+    <h5 class="mt-4 mb-3">Recent Activity</h5>
+    <div class="activity-list">
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="activity-content">
+                <p class="activity-text">Updated your "Senior Developer" CV</p>
+                <p class="activity-time">Today at 2:45 PM</p>
+            </div>
+        </div>
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-download"></i>
+            </div>
+            <div class="activity-content">
+                <p class="activity-text">Downloaded CV as PDF</p>
+                <p class="activity-time">Yesterday at 10:30 AM</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'core/profile_css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-app">
+    {% include 'profile/head.html' %}
+    
+    <div class="profile-app-container">
+        {% include 'profile/sidebar.html' %}
+        
+        <main class="profile-main-content">
+            {% block profile_content %}
+                {% include 'profile/main_content.html' %}
+            {% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'resumes/create_resume.css' %}?v=1.1">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="resume-container">
+        <div class="resume-header">
+            <h1>Resume List</h1>
+        </div>
+        
+        <div class="resume-list">
+            <ul>
+                <li onclick="toggleSection(this)">
+                    Basic Details
+                    <div class="section-content">
+                        {% comment %} {% include "resume_forms/basic_details.html" %} {% endcomment %}
+                    </div>
+                </li>
+                <li onclick="toggleSection(this)">
+                    Skills & Expertise
+                    <div class="section-content">
+                        {% comment %} {% include "resume_forms/skills.html" %} {% endcomment %}
+                    </div>
+                </li>
+                <li onclick="toggleSection(this)">
+                    Education
+                    <div class="section-content">
+                        {% comment %} {% include "resume_forms/education.html" %} {% endcomment %}
+                    </div>
+                </li>
+                <li onclick="toggleSection(this)">
+                    Experience
+                    <div class="section-content">
+                        {% comment %} {% include "resume_forms/experience.html" %} {% endcomment %}
+                    </div>
+                </li>
+                <li onclick="toggleSection(this)">
+                    Responsibilities
+                    <div class="section-content">
+                        {% comment %} {% include "resume_forms/responsibilities.html" %} {% endcomment %}
+                    </div>
+                </li>
+                <li onclick="toggleSection(this)">
+                    Achievements
+                    <div class="section-content">
+                        {% comment %} {% include "resume_forms/achievements.html" %} {% endcomment %}
+                    </div>
+                </li>
+                <li onclick="toggleSection(this)">
+                    Certificates
+                    <div class="section-content">
+                        {% comment %} {% include "resume_forms/certificates.html" %} {% endcomment %}
+                    </div>
+                </li>
+                <li onclick="toggleSection(this)">
+                    Project
+                    <div class="section-content">
+                        {% comment %} {% include "resume_forms/project.html" %} {% endcomment %}
+                    </div>
+                </li>
+                <li onclick="toggleSection(this)">
+                    Social Links
+                    <div class="section-content">
+                        {% comment %} {% include "resume_forms/social_links.html" %} {% endcomment %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="template-divider"></div>
+        
+        <div class="template-title">Template 1</div>
+        
+        <div class="template-divider"></div>
+        
+        <div class="resume-name">Your Full Name</div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        function toggleSection(element) {
+            // Toggle active class on the list item
+            element.classList.toggle('active');
+            
+            // Get the content div
+            const content = element.querySelector('.section-content');
+            
+            // Toggle the content visibility
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+        
+        // Optional: Open the first section by default
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstItem = document.querySelector('.resume-list li');
+            if (firstItem) {
+                toggleSection(firstItem);
+            }
+        });
+    </script>
+
+    <script>
+        function toggleSection(element) {
+            // Close any open sections in the same column first
+            const column = element.closest('.resume-column');
+            const currentlyActive = column.querySelector('.resume-list li.active');
+            
+            if (currentlyActive && currentlyActive !== element) {
+                currentlyActive.classList.remove('active');
+                currentlyActive.querySelector('.section-content').style.display = 'none';
+            }
+            
+            // Toggle current section
+            element.classList.toggle('active');
+            const content = element.querySelector('.section-content');
+            content.style.display = element.classList.contains('active') ? 'block' : 'none';
+        }
+        
+        // Optional: Open the first section by default
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstItems = document.querySelectorAll('.resume-column .resume-list li:first-child');
+            firstItems.forEach(item => {
+                toggleSection(item);
+            });
+        });
+    </script>
+{% endblock %}

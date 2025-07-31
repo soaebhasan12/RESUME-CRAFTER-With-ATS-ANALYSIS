@@ -1,0 +1,72 @@
+<div id="settings-section" class="profile-section">
+    <h2 class="section-title">Account Settings</h2>
+    
+    <form id="profileForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-section">
+            <h5>Personal Information</h5>
+            <div class="form-group mb-3">
+                <label class="form-label">Profile Picture</label>
+                <div class="d-flex align-items-center">
+                    <img src="{{ profile.get_profile_picture }}" class="settings-picture me-4" id="settingsProfilePicture">
+                    <div>
+                        <input type="file" class="form-control" name="profile_picture" accept="image/*">
+                        <small class="text-muted">Recommended size: 300x300 pixels</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Professional Title</label>
+                <input type="text" class="form-control" name="professional_title" 
+                       value="{{ profile.professional_title|default:'' }}">
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h5>Contact Information</h5>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" value="{{ user.email }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" name="phone" value="{{ profile.phone|default:'' }}">
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+    </form>
+    
+    <div class="danger-zone">
+        <h5 class="text-danger">Danger Zone</h5>
+        <div class="danger-card">
+            <div class="mb-3">
+                <h6>Change Password</h6>
+                <p class="text-muted small mb-2">Update your account password</p>
+                <button class="btn btn-outline-danger" id="changePasswordBtn">
+                    <i class="fas fa-key me-2"></i> Change Password
+                </button>
+            </div>
+            <div>
+                <h6>Delete Account</h6>
+                <p class="text-muted small mb-2">Permanently delete your account and all data</p>
+                <button class="btn btn-danger" id="deleteAccountBtn">
+                    <i class="fas fa-exclamation-triangle me-2"></i> Delete Account
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

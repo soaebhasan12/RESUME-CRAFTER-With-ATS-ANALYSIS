@@ -1,0 +1,748 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} CV Crafter - Build Professional Resumes in Minutes {% endblock %}
+
+{% block extra_css %}
+    <link href="{% static 'core/home.css' %}?v=1.2" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+    <section class="hero">
+            <div class="hero-content">
+                <h1>Craft Your <br/>Perfect Resume <br/>in Minutes</h1>
+                <p>CV Crafter helps you create professional, ATS-friendly resumes that land interviews.<br/> Choose from beautiful templates, customize with ease, and download in multiple formats.</p>
+                
+                <div class="cta-buttons">
+                <a href="#" class="btn btn-primary" id="createResumeBtn">Create My Resume - It's Free</a>
+                <a href="#" class="btn btn-secondary">Explore Templates</a>
+                </div>
+                
+                <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="resumeCount">50,000+</span>
+                    <span class="stat-label">Resumes Created</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4.9</span>
+                    <span class="stat-label">Star Rating</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">30+</span>
+                    <span class="stat-label">Templates</span>
+                </div>
+                </div>
+            </div>
+            <img src="{% static 'App_Blog/resume-example.png' %}" alt="Resume example" class="hero-image">
+        </section>
+
+
+
+
+
+
+
+
+        <section class="features-section">
+        <div class="section-header">
+            <h2>Why Choose CV Crafter?</h2>
+            <p>Everything you need to create the perfect resume that gets you hired faster</p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Feature Card 1 -->
+            <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4361ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+            </div>
+            <h3>ATS-Optimized Templates</h3>
+            <p>Our resumes are designed to pass through Applicant Tracking Systems used by 99% of Fortune 500 companies.</p>
+            </div>
+
+            <!-- Feature Card 2 -->
+            <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4361ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                </svg>
+            </div>
+            <h3>Multiple Formats</h3>
+            <p>Download your resume in PDF, Word, or plain text format with just one click.</p>
+            </div>
+
+            <!-- Feature Card 3 -->
+            <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4361ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            </div>
+            <h3>Expert Suggestions</h3>
+            <p>Get AI-powered recommendations to improve your resume's content and formatting.</p>
+            </div>
+
+            <!-- Feature Card 4 -->
+            <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4361ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h3>Free Forever</h3>
+            <p>Create, download, and print unlimited resumes without any hidden charges.</p>
+            </div>
+        </div>
+        </section>
+
+
+
+
+
+
+
+
+
+            <!-- Template Gallery Section -->
+        <section class="template-gallery">
+        <div class="section-header">
+            <h2>Professional Resume Templates</h2>
+            <p>Choose from our collection of ATS-friendly templates designed for all industries</p>
+        </div>
+
+        <div class="gallery-container">
+            <!-- Template Slider -->
+            <div class="template-slider">
+            <!-- Template 1 -->
+            <div class="template-card">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Modern Resume Template" class="template-image">
+                <div class="template-overlay">
+                <h3>Modern Pro</h3>
+                <p>Clean, contemporary design</p>
+                <button class="use-template-btn">Use This Template</button>
+                </div>
+            </div>
+
+            <!-- Template 2 -->
+            <div class="template-card">
+                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Creative Resume Template" class="template-image">
+                <div class="template-overlay">
+                <h3>Creative</h3>
+                <p>For design professionals</p>
+                <button class="use-template-btn">Use This Template</button>
+                </div>
+            </div>
+
+            <!-- Template 3 -->
+            <div class="template-card">
+                <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Executive Resume Template" class="template-image">
+                <div class="template-overlay">
+                <h3>Executive</h3>
+                <p>For senior professionals</p>
+                <button class="use-template-btn">Use This Template</button>
+                </div>
+            </div>
+
+            <!-- Template 4 -->
+            <div class="template-card">
+                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Minimal Resume Template" class="template-image">
+                <div class="template-overlay">
+                <h3>Minimal</h3>
+                <p>Simple and elegant</p>
+                <button class="use-template-btn">Use This Template</button>
+                </div>
+            </div>
+            </div>
+
+            <!-- Navigation Arrows -->
+            <button class="slider-arrow prev-arrow" aria-label="Previous templates">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4361ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+            </button>
+            <button class="slider-arrow next-arrow" aria-label="Next templates">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4361ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+            </button>
+        </div>
+
+        <div class="view-all-container">
+            <a href="#" class="view-all-btn">View All Templates →</a>
+        </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+        <div class="section-header">
+            <h2>What Our Users Say</h2>
+            <p>Join 50,000+ professionals who landed their dream jobs with CV Crafter</p>
+        </div>
+
+        <div class="testimonial-slider">
+            <!-- Testimonial Cards Container -->
+            <div class="testimonials-container">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-card">
+                <div class="rating">★ ★ ★ ★ ★</div>
+                <p class="testimonial-text">"CV Crafter helped me create a professional resume that got me 5 interview calls in just 2 weeks. The ATS optimization is truly effective!"</p>
+                <div class="user">
+                <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Priya Sharma" class="user-avatar">
+                <div class="user-info">
+                    <h4 class="user-name">Priya Sharma</h4>
+                    <p class="user-title">Software Engineer at TechMahindra</p>
+                </div>
+                </div>
+                <div class="quote-icon">”</div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="testimonial-card">
+                <div class="rating">★ ★ ★ ★ ★</div>
+                <p class="testimonial-text">"After struggling with resume writing for years, I finally got multiple job offers using the Executive template. The formatting suggestions were game-changing!"</p>
+                <div class="user">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Rahul Verma" class="user-avatar">
+                <div class="user-info">
+                    <h4 class="user-name">Rahul Verma</h4>
+                    <p class="user-title">Senior Manager at Deloitte</p>
+                </div>
+                </div>
+                <div class="quote-icon">”</div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="testimonial-card">
+                <div class="rating">★ ★ ★ ★ ★</div>
+                <p class="testimonial-text">"As a fresh graduate, I was struggling to get noticed. CV Crafter's resume got me 3x more responses than my old one. Landed my first job at Amazon!"</p>
+                <div class="user">
+                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Ananya Patel" class="user-avatar">
+                <div class="user-info">
+                    <h4 class="user-name">Ananya Patel</h4>
+                    <p class="user-title">Junior Developer at Amazon</p>
+                </div>
+                </div>
+                <div class="quote-icon">”</div>
+            </div>
+            </div>
+
+            <!-- Navigation Dots -->
+            <div class="slider-dots">
+            <button class="dot active" aria-label="Show testimonial 1"></button>
+            <button class="dot" aria-label="Show testimonial 2"></button>
+            <button class="dot" aria-label="Show testimonial 3"></button>
+            </div>
+        </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- How It Works Section -->
+        <section class="how-it-works">
+        <div class="section-header">
+            <h2>How CV Crafter Works</h2>
+            <p>Create your perfect resume in just 3 simple steps</p>
+        </div>
+
+        <div class="steps-container">
+            <!-- Connecting Line -->
+            <div class="connecting-line"></div>
+
+            <!-- Step 1 -->
+            <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                </svg>
+            </div>
+            <h3>Choose a Template</h3>
+            <p>Select from our collection of professionally designed, ATS-friendly resume templates</p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            </div>
+            <h3>Fill in Your Details</h3>
+            <p>Use our smart editor to add your work experience, skills, and education with expert suggestions</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            </div>
+            <h3>Download & Apply</h3>
+            <p>Download your resume in PDF, Word, or TXT format and start applying for jobs</p>
+            </div>
+        </div>
+
+        <div class="cta-container">
+            <a href="#" class="cta-button">Start Building Your Resume</a>
+        </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <script>
+            // Animate steps when they come into view
+            const stepCards = document.querySelectorAll('.step-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        
+                        // Animate the connecting line
+                        if (index === stepCards.length - 1) {
+                            document.querySelector('.connecting-line').style.background = 'linear-gradient(to right, #e5e7eb, #4361ee, #4361ee, #e5e7eb)';
+                            document.querySelector('.connecting-line').style.backgroundSize = '200% 100%';
+                            document.querySelector('.connecting-line').style.animation = 'lineFill 1s forwards';
+                        }
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            stepCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = `all 0.5s ease ${index * 0.2}s`;
+                observer.observe(card);
+            });
+
+            // Add hover effect to CTA button
+            const ctaButton = document.querySelector('.cta-button');
+            ctaButton.addEventListener('mouseenter', () => {
+                ctaButton.style.transform = 'translateY(-3px)';
+                ctaButton.style.boxShadow = '0 8px 25px rgba(67, 97, 238, 0.4)';
+            });
+            
+            ctaButton.addEventListener('mouseleave', () => {
+                ctaButton.style.transform = 'translateY(0)';
+                ctaButton.style.boxShadow = '0 4px 15px rgba(67, 97, 238, 0.3)';
+            });
+
+            // Animation for connecting line
+            document.head.insertAdjacentHTML('beforeend', `
+                <style>
+                    @keyframes lineFill {
+                        0% { background-position: 100% 0; }
+                        100% { background-position: 0 0; }
+                    }
+                </style>
+            `);
+        </script>
+
+
+
+
+
+
+
+
+
+        <script>
+            // Testimonial Slider Functionality
+            const testimonialsContainer = document.querySelector('.testimonials-container');
+            const dots = document.querySelectorAll('.dot');
+            const testimonialCards = document.querySelectorAll('.testimonial-card');
+            let currentIndex = 0;
+
+            // Update dot indicators
+            function updateDots() {
+                dots.forEach((dot, index) => {
+                    dot.style.backgroundColor = index === currentIndex ? '#4361ee' : '#c7d2fe';
+                });
+            }
+
+            // Scroll to testimonial
+            function scrollToTestimonial(index) {
+                currentIndex = index;
+                const cardWidth = testimonialCards[0].offsetWidth + 32; // width + gap
+                testimonialsContainer.scrollTo({
+                    left: cardWidth * index,
+                    behavior: 'smooth'
+                });
+                updateDots();
+            }
+
+            // Dot click handlers
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => scrollToTestimonial(index));
+            });
+
+            // Auto-advance testimonials
+            let autoScrollInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % testimonialCards.length;
+                scrollToTestimonial(currentIndex);
+            }, 5000);
+
+            // Pause auto-scroll on hover
+            testimonialsContainer.addEventListener('mouseenter', () => {
+                clearInterval(autoScrollInterval);
+            });
+
+            testimonialsContainer.addEventListener('mouseleave', () => {
+                autoScrollInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % testimonialCards.length;
+                    scrollToTestimonial(currentIndex);
+                }, 5000);
+            });
+
+            // Handle scroll events for dot updates
+            testimonialsContainer.addEventListener('scroll', () => {
+                const cardWidth = testimonialCards[0].offsetWidth;
+                currentIndex = Math.round(testimonialsContainer.scrollLeft / cardWidth);
+                updateDots();
+            });
+
+            // Animate cards when they come into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            testimonialCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = `all 0.5s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+        <script>
+            // Testimonial Slider Functionality
+            document.addEventListener('DOMContentLoaded', function() {
+            const testimonialsContainer = document.querySelector('.testimonials-container');
+            const dots = document.querySelectorAll('.dot');
+            const testimonialCards = document.querySelectorAll('.testimonial-card');
+            let currentIndex = 0;
+            let autoScrollInterval;
+
+            // Update dot indicators
+            function updateDots(index) {
+                dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+                });
+            }
+
+            // Scroll to testimonial
+            function scrollToTestimonial(index) {
+                currentIndex = index;
+                const cardWidth = testimonialCards[0].offsetWidth + 32; // width + gap
+                testimonialsContainer.scrollTo({
+                left: cardWidth * index,
+                behavior: 'smooth'
+                });
+                updateDots(index);
+            }
+
+            // Dot click handlers
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => scrollToTestimonial(index));
+            });
+
+            // Auto-advance testimonials
+            function startAutoScroll() {
+                autoScrollInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % testimonialCards.length;
+                scrollToTestimonial(currentIndex);
+                }, 5000);
+            }
+
+            // Pause auto-scroll on hover
+            testimonialsContainer.addEventListener('mouseenter', () => {
+                clearInterval(autoScrollInterval);
+            });
+
+            testimonialsContainer.addEventListener('mouseleave', startAutoScroll);
+
+            // Handle scroll events for dot updates
+            testimonialsContainer.addEventListener('scroll', () => {
+                const cardWidth = testimonialCards[0].offsetWidth;
+                const newIndex = Math.round(testimonialsContainer.scrollLeft / cardWidth);
+                if (newIndex !== currentIndex) {
+                currentIndex = newIndex;
+                updateDots(currentIndex);
+                }
+            });
+
+            // Initialize
+            startAutoScroll();
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+        <script>
+            // Add hover animation to feature cards
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-10px)';
+                    card.style.boxShadow = '0 15px 30px rgba(67, 97, 238, 0.1)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+                });
+            });
+
+            // Animate cards when they come into view
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            featureCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = `all 0.5s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+        <script>
+            // Animated counter for resume count
+            const resumeCount = document.getElementById('resumeCount');
+            let targetCount = 50000;
+            let currentCount = 0;
+            const increment = targetCount / 50;
+
+            const animateCounter = () => {
+                if (currentCount < targetCount) {
+                    currentCount += increment;
+                    resumeCount.textContent = Math.floor(currentCount).toLocaleString() + '+';
+                    requestAnimationFrame(animateCounter);
+                } else {
+                    resumeCount.textContent = targetCount.toLocaleString() + '+';
+                }
+            };
+
+            // Start animation when hero section is in view
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    animateCounter();
+                    observer.unobserve(entries[0].target);
+                }
+            }, { threshold: 0.5 });
+
+            observer.observe(document.querySelector('.hero'));
+
+            // Button hover effect
+            const createResumeBtn = document.getElementById('createResumeBtn');
+            createResumeBtn.addEventListener('mouseenter', () => {
+                createResumeBtn.style.transform = 'translateY(-3px)';
+                createResumeBtn.style.boxShadow = '0 8px 25px rgba(67, 97, 238, 0.4)';
+            });
+
+            createResumeBtn.addEventListener('mouseleave', () => {
+                createResumeBtn.style.transform = 'translateY(0)';
+                createResumeBtn.style.boxShadow = '0 4px 15px rgba(67, 97, 238, 0.3)';
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.querySelector('.template-slider');
+            const prevBtn = document.querySelector('.prev-arrow');
+            const nextBtn = document.querySelector('.next-arrow');
+            const templateCards = document.querySelectorAll('.template-card');
+            const cardWidth = templateCards[0].offsetWidth + 32; // width + gap
+
+            // Hide arrows on mobile
+            function checkArrowVisibility() {
+                if (window.innerWidth < 768) {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                } else {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+                }
+            }
+
+            window.addEventListener('resize', checkArrowVisibility);
+            checkArrowVisibility();
+
+            // Navigation arrows
+            nextBtn.addEventListener('click', () => {
+                slider.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            });
+
+            prevBtn.addEventListener('click', () => {
+                slider.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+            });
+
+            // Template card click handler
+            document.querySelectorAll('.use-template-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const templateName = e.target.closest('.template-card').querySelector('h3').textContent;
+                // In your actual implementation, redirect to template editor
+                console.log(`Selected template: ${templateName}`);
+                });
+            });
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            // Animated counter for resume count
+            const resumeCount = document.getElementById('resumeCount');
+            let targetCount = 50000;
+            let currentCount = 0;
+            const increment = targetCount / 50;
+
+            const animateCounter = () => {
+                if (currentCount < targetCount) {
+                currentCount += increment;
+                resumeCount.textContent = Math.floor(currentCount).toLocaleString() + '+';
+                requestAnimationFrame(animateCounter);
+                } else {
+                resumeCount.textContent = targetCount.toLocaleString() + '+';
+                }
+            };
+
+            // Start animation when hero section is in view
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                animateCounter();
+                observer.unobserve(entries[0].target);
+                }
+            }, { threshold: 0.5 });
+
+            observer.observe(document.querySelector('.hero'));
+
+            // Button hover effect
+            const createResumeBtn = document.getElementById('createResumeBtn');
+            createResumeBtn.addEventListener('mouseenter', () => {
+                createResumeBtn.style.transform = 'translateY(-3px)';
+                createResumeBtn.style.boxShadow = '0 8px 25px rgba(67, 97, 238, 0.4)';
+            });
+
+            createResumeBtn.addEventListener('mouseleave', () => {
+                createResumeBtn.style.transform = 'translateY(0)';
+                createResumeBtn.style.boxShadow = '0 4px 15px rgba(67, 97, 238, 0.3)';
+            });
+            });
+        </script>
+    {% endblock content %}
