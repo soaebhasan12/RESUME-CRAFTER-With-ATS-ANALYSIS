@@ -5,9 +5,14 @@ Create ATS-friendly resumes, get real-time feedback, and export polished PDFs—
 
 ---
 
-![Dashboard Preview](screenshots/dashboard.png)
-![Resume Editor](screenshots/editor.png)
-![ATS Analysis](screenshots/analysis.png)
+## 🖼️ Project Screenshots  
+| ![Home Page (Dark Mode)](static/project_screenshots/home_page_dark.png) | ![Create Resume](static/project_screenshots/create_resume.png) |  
+|:--:|:--:|  
+| **Home Page** | **Resume Editor** |  
+
+| ![Login Page](static/project_screenshots/login_page.png) | ![Register Page](static/project_screenshots/register_page.png) |  
+|:--:|:--:|  
+| **User Login** | **Account Registration** |  
 
 ## 🚀 Key Features
 
