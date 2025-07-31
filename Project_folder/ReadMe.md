@@ -122,5 +122,3 @@ MIT License - see [LICENSE](LICENSE) for details.
 > This tool surfaces what matters most—not just beautiful designs.
 
 **Build resumes that get seen, not filtered.** ✨
-```
-
