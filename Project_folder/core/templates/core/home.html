@@ -14,8 +14,8 @@
                 <p>CV Crafter helps you create professional, ATS-friendly resumes that land interviews.<br/> Choose from beautiful templates, customize with ease, and download in multiple formats.</p>
                 
                 <div class="cta-buttons">
-                <a href="#" class="btn btn-primary" id="createResumeBtn">Create My Resume - It's Free</a>
-                <a href="#" class="btn btn-secondary">Explore Templates</a>
+                <a href="{% url 'resumes:resume_list' %}" class="btn btn-primary" id="createResumeBtn">Create My Resume - It's Free</a>
+                <a href="{% url 'resumes:resume_list' %}" class="btn btn-secondary">Explore Templates</a>
                 </div>
                 
                 <div class="stats">
@@ -177,7 +177,7 @@
         </div>
 
         <div class="view-all-container">
-            <a href="#" class="view-all-btn">View All Templates →</a>
+            <a href="{% url 'resumes:resume_list' %}" class="view-all-btn">View All Templates →</a>
         </div>
         </section>
 
@@ -325,7 +325,7 @@
         </div>
 
         <div class="cta-container">
-            <a href="#" class="cta-button">Start Building Your Resume</a>
+            <a href="{% url 'resumes:resume_list' %}" class="cta-button">Start Building Your Resume</a>
         </div>
         </section>
 
