@@ -45,7 +45,7 @@
 
 .main-content {
     min-height: calc(100vh - 180px);
-    padding: 2rem 0;
+    /* padding: 2rem 0; */
 }
 
 .footer {
@@ -81,7 +81,8 @@
 /* Ensure main content takes full available space */
 .main-content {
     flex: 1;
-    min-height: calc(100vh - 400px); /* Adjust based on header/footer height */
+    min-height: calc(100vh - 400px); 
+                            /* Adjust based on header/footer height */
 }
 
 /* Container adjustments */
