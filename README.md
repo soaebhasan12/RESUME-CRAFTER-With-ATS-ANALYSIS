@@ -6,7 +6,7 @@ Create ATS-friendly resumes, get real-time feedback, and export polished PDFs—
 ---
 
 ## 🖼️ Project Screenshots  
-| ![Home Page (Dark Mode)](Project_folder/static/project_screenshots/HOME_PAGE_(DARK-MODE).png) | ![Create Resume](Project_folder/static/project_screenshots/CREATE_RESUME_PAGE.png) |  
+| ![Home Page (Dark Mode)](Project_folder/static/project_screenshots/HOME_PAGE_(DARK_MODE).png) | ![Create Resume](Project_folder/static/project_screenshots/CREATE_RESUME_PAGE.png) |  
 |:--:|:--:|  
 | **Home Page** | **Resume Editor** |  
 
