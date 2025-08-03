@@ -114,10 +114,6 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-    .main-content {
-        padding: 1rem 0;
-    }
-    
     .theme-toggle {
         bottom: 20px;
         right: 20px;
