@@ -1,0 +1,43 @@
+<div class="resume-header">
+    <h1 class="resume-name">{{ basic_details.full_name|default:"Your Name" }}</h1>
+    <div class="resume-title">{{ resume.title|default:"Your Profession" }}</div>
+</div>
+
+<div class="resume-section">
+    <h2 class="section-title"><i class="bi bi-person"></i> Contact</h2>
+    <div class="section-content">
+        <p><strong>Email:</strong> {{ basic_details.email|default:"your.email@example.com" }}</p>
+        <p><strong>Phone:</strong> {{ basic_details.phone|default:"+1 (234) 567-8901" }}</p>
+    </div>
+</div>
+
+<div class="resume-section">
+    <h2 class="section-title"><i class="bi bi-tools"></i> Skills</h2>
+    <div class="section-content">
+        <div class="skills-list">
+            {% for name, level in skills %}
+                {% if name %}
+                    <span class="skill-badge" title="{{ level|default:'No level specified' }}">
+                        {{ name }}
+                    </span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="resume-section">
+    <h2 class="section-title"><i class="bi bi-mortarboard"></i> Education</h2>
+    <div class="section-content">
+        {% for institution, degree, field, start, end, current, desc in educations %}
+            {% if institution %}
+                <div class="education-item">
+                    <h3>{{ institution }}</h3>
+                    <div>{{ degree }} in {{ field }}</div>
+                    <div>{{ start }} - {% if current %}Present{% else %}{{ end }}{% endif %}</div>
+                    {% if desc %}<p>{{ desc }}</p>{% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

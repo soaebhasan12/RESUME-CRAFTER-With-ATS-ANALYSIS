@@ -1,134 +1,187 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block another_head_tags %}
+<title>Create Professional Resume | Resume Crafter</title>
+<meta name="description" content="Create your perfect resume with our easy-to-use builder. Choose from professional templates and customize every section.">
+<meta name="keywords" content="resume builder, CV creator, professional resume, job application">
+{% endblock %}
+
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'resumes/create_resume.css' %}?v=1.1">
-{% endblock extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="{% static 'resumes/create_resume.css' %}?v=1.1">
+{% endblock %}
 
 {% block content %}
-    <div class="resume-container">
-        <div class="resume-header">
-            <h1>Resume List</h1>
+<div class="resume-builder-container">
+    <div class="row g-0">
+        <!-- Left Sidebar - Form Controls -->
+        <div class="col-lg-4 col-md-5 sidebar">
+            <div class="sidebar-header">
+                <h2><i class="bi bi-menu-button"></i> Resume Details</h2>
+                <button class="btn btn-sm btn-outline-secondary toggle-preview">
+                    <i class="bi bi-layout-sidebar-inset-reverse"></i>
+                </button>
+            </div>
+            
+            {% comment %} <form id="resumeForm" method="post" action="{% url 'resumes:create_resume' resume.id %}" enctype="multipart/form-data"> {% endcomment %}
+            <form id="resumeForm" method="post" action="{% url 'resumes:create_resume' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="section" value="basic_details">
+                
+                <!-- Basic Details Section -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#basicDetails">
+                            <i class="bi bi-person me-2"></i> Basic Details
+                        </button>
+                    </h2>
+                    <div id="basicDetails" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            <div class="mb-3">
+                                <label class="form-label">Resume Title</label>
+                                <input type="text" class="form-control" name="title" value="{{ resume.title }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="full_name" value="{{ resume.basic_details.full_name }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" value="{{ resume.basic_details.email }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" name="phone" value="{{ resume.basic_details.phone }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Summary</label>
+                                <textarea class="form-control" name="summary" rows="4">{{ resume.basic_details.summary }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#skillsSection">
+                            <i class="bi bi-tools me-2"></i> Skills & Expertise
+                        </button>
+                    </h2>
+                    <div id="skillsSection" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <div id="skillsContainer">
+                                {% for skill in resume.skills.all %}
+                                <div class="skill-item mb-3">
+                                    <input type="hidden" name="skill_ids[]" value="{{ skill.id }}">
+                                    <div class="d-flex">
+                                        <input type="text" class="form-control me-2" name="skill_names[]" value="{{ skill.name }}">
+                                        <select class="form-select" name="skill_levels[]" style="width: 120px;">
+                                            <option value="beginner" {% if skill.level == 'beginner' %}selected{% endif %}>Beginner</option>
+                                            <option value="intermediate" {% if skill.level == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                                            <option value="advanced" {% if skill.level == 'advanced' %}selected{% endif %}>Advanced</option>
+                                            <option value="expert" {% if skill.level == 'expert' %}selected{% endif %}>Expert</option>
+                                        </select>
+                                        <button type="button" class="btn btn-sm btn-outline-danger ms-2 remove-skill"><i class="bi bi-trash"></i></button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="addSkillBtn">
+                                <i class="bi bi-plus"></i> Add Skill
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Section -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#educationSection">
+                            <i class="bi bi-mortarboard me-2"></i> Education
+                        </button>
+                    </h2>
+                    <div id="educationSection" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <div id="educationContainer">
+                                {% for education in resume.educations.all %}
+                                <div class="education-item mb-4 p-3 border rounded">
+                                    <input type="hidden" name="education_ids[]" value="{{ education.id }}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Institution</label>
+                                        <input type="text" class="form-control" name="education_institutions[]" value="{{ education.institution }}">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Degree</label>
+                                            <input type="text" class="form-control" name="education_degrees[]" value="{{ education.degree }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Field of Study</label>
+                                            <input type="text" class="form-control" name="education_fields[]" value="{{ education.field_of_study }}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Start Year</label>
+                                            <input type="month" class="form-control" name="education_start_years[]" value="{{ education.start_year }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">End Year</label>
+                                            <input type="month" class="form-control" name="education_end_years[]" value="{{ education.end_year }}">
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" name="education_current[]" {% if education.currently_studying %}checked{% endif %}>
+                                                <label class="form-check-label">Currently studying</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" name="education_descriptions[]" rows="3">{{ education.description }}</textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-danger remove-education"><i class="bi bi-trash"></i> Remove</button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="addEducationBtn">
+                                <i class="bi bi-plus"></i> Add Education
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add other sections (Experience, Projects, etc.) following same pattern -->
+                
+                <div class="sidebar-footer mt-3">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="bi bi-save"></i> Save Resume
+                    </button>
+                    {% comment %} <a href="{% url 'generate_pdf' resume.id %}" class="btn btn-success me-2"> {% endcomment %}
+                    {% if not creating_new %}
+                        <a href="{% url 'resumes:download_resume' resume.id %}" class="btn btn-success me-2">
+                            <i class="bi bi-download"></i> Download PDF
+                        </a>
+                    {% else %}
+                        <button class="btn btn-secondary me-2" disabled title="Save the resume first">
+                            <i class="bi bi-download"></i> Download PDF
+                        </button>
+                    {% endif %}
+                </div>
+            </form>
         </div>
-        
-        <div class="resume-list">
-            <ul>
-                <li onclick="toggleSection(this)">
-                    Basic Details
-                    <div class="section-content">
-                        {% comment %} {% include "resume_forms/basic_details.html" %} {% endcomment %}
-                    </div>
-                </li>
-                <li onclick="toggleSection(this)">
-                    Skills & Expertise
-                    <div class="section-content">
-                        {% comment %} {% include "resume_forms/skills.html" %} {% endcomment %}
-                    </div>
-                </li>
-                <li onclick="toggleSection(this)">
-                    Education
-                    <div class="section-content">
-                        {% comment %} {% include "resume_forms/education.html" %} {% endcomment %}
-                    </div>
-                </li>
-                <li onclick="toggleSection(this)">
-                    Experience
-                    <div class="section-content">
-                        {% comment %} {% include "resume_forms/experience.html" %} {% endcomment %}
-                    </div>
-                </li>
-                <li onclick="toggleSection(this)">
-                    Responsibilities
-                    <div class="section-content">
-                        {% comment %} {% include "resume_forms/responsibilities.html" %} {% endcomment %}
-                    </div>
-                </li>
-                <li onclick="toggleSection(this)">
-                    Achievements
-                    <div class="section-content">
-                        {% comment %} {% include "resume_forms/achievements.html" %} {% endcomment %}
-                    </div>
-                </li>
-                <li onclick="toggleSection(this)">
-                    Certificates
-                    <div class="section-content">
-                        {% comment %} {% include "resume_forms/certificates.html" %} {% endcomment %}
-                    </div>
-                </li>
-                <li onclick="toggleSection(this)">
-                    Project
-                    <div class="section-content">
-                        {% comment %} {% include "resume_forms/project.html" %} {% endcomment %}
-                    </div>
-                </li>
-                <li onclick="toggleSection(this)">
-                    Social Links
-                    <div class="section-content">
-                        {% comment %} {% include "resume_forms/social_links.html" %} {% endcomment %}
-                    </div>
-                </li>
-            </ul>
+
+        <!-- Right Side - Resume Preview -->
+        <div class="col-lg-8 col-md-7 resume-preview">
+            <div class="resume-paper" id="resumePreview">
+                <!-- Preview will be updated by JavaScript -->
+            </div>
         </div>
-        
-        <div class="template-divider"></div>
-        
-        <div class="template-title">Template 1</div>
-        
-        <div class="template-divider"></div>
-        
-        <div class="resume-name">Your Full Name</div>
     </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
-    <script>
-        function toggleSection(element) {
-            // Toggle active class on the list item
-            element.classList.toggle('active');
-            
-            // Get the content div
-            const content = element.querySelector('.section-content');
-            
-            // Toggle the content visibility
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-            } else {
-                content.style.display = 'block';
-            }
-        }
-        
-        // Optional: Open the first section by default
-        document.addEventListener('DOMContentLoaded', function() {
-            const firstItem = document.querySelector('.resume-list li');
-            if (firstItem) {
-                toggleSection(firstItem);
-            }
-        });
-    </script>
-
-    <script>
-        function toggleSection(element) {
-            // Close any open sections in the same column first
-            const column = element.closest('.resume-column');
-            const currentlyActive = column.querySelector('.resume-list li.active');
-            
-            if (currentlyActive && currentlyActive !== element) {
-                currentlyActive.classList.remove('active');
-                currentlyActive.querySelector('.section-content').style.display = 'none';
-            }
-            
-            // Toggle current section
-            element.classList.toggle('active');
-            const content = element.querySelector('.section-content');
-            content.style.display = element.classList.contains('active') ? 'block' : 'none';
-        }
-        
-        // Optional: Open the first section by default
-        document.addEventListener('DOMContentLoaded', function() {
-            const firstItems = document.querySelectorAll('.resume-column .resume-list li:first-child');
-            firstItems.forEach(item => {
-                toggleSection(item);
-            });
-        });
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'resumes/create_resume.js' %}"></script>
 {% endblock %}

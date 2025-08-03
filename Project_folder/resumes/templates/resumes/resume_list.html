@@ -2,73 +2,79 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'resumes/resume_list.css' %}?v=1.1">
-{% endblock extra_css %}
+<link rel="stylesheet" href="{% static 'resumes/resume_list.css' %}?v=1.1" />
+{% endblock %}
 
 {% block content %}
-<div class="resume-dashboard">
+<div class="main-container">
+  <div class="resume-dashboard">
     <div class="header">
-        <h1>My Resumes</h1>
-        <a href="{% url 'resumes:create_resume' %}" class="btn btn-primary">
-            Create a new resume
-        </a>
+      <h1>My Resumes</h1>
+      <a href="{% url 'resumes:create_resume' %}" class="btn btn-primary">
+        Create a new resume
+      </a>
     </div>
 
     <div class="templates-section">
-        <h2>Choose from a wide variety of templates</h2>
-        <div class="template-grid">
-            <!-- Template 1 -->
-            <div class="template-card" data-template="template1">
-                <div class="template-preview professional-blue"></div>
-                <div class="template-name">Professional Blue</div>
-            </div>
-            
-            <!-- Template 2 -->
-            <div class="template-card" data-template="template2">
-                <div class="template-preview modern-red"></div>
-                <div class="template-name">Modern Red</div>
-            </div>
-            
-            <!-- Template 3 -->
-            <div class="template-card" data-template="template3">
-                <div class="template-preview creative-green"></div>
-                <div class="template-name">Creative Green</div>
-            </div>
-            
-            <!-- Template 4 -->
-            <div class="template-card" data-template="template4">
-                <div class="template-preview minimalist-black"></div>
-                <div class="template-name">Minimalist Black</div>
-            </div>
+      <h2>Choose from a wide variety of templates</h2>
+      <div class="template-grid">
+        <!-- Template 1 -->
+        <div class="template-card" data-template="template1">
+          <div class="template-preview professional-blue"></div>
+          <div class="template-name">Professional Blue</div>
         </div>
+
+        <!-- Template 2 -->
+        <div class="template-card" data-template="template2">
+          <div class="template-preview modern-red"></div>
+          <div class="template-name">Modern Red</div>
+        </div>
+
+        <!-- Template 3 -->
+        <div class="template-card" data-template="template3">
+          <div class="template-preview creative-green"></div>
+          <div class="template-name">Creative Green</div>
+        </div>
+
+        <!-- Template 4 -->
+        <div class="template-card" data-template="template4">
+          <div class="template-preview minimalist-black"></div>
+          <div class="template-name">Minimalist Black</div>
+        </div>
+      </div>
     </div>
 
     <div class="resumes-section">
-        <h2>My Resumes</h2>
-        <div class="resume-list">
-            {% for resume in resumes %}
-            <div class="resume-card">
-                <div class="resume-info">
-                    <h3>{{ resume.title }}</h3>
-                    <div class="resume-meta">
-                        <span class="updated-date">Updated on {{ resume.updated_at|date:"n/j/Y" }}</span>
-                    </div>
-                </div>
-                <div class="resume-actions">
-                    <a href="{% url 'edit_resume' resume.id %}" class="btn btn-edit">Edit</a>
-                    <a href="{% url 'generate_pdf' resume.id %}" class="btn btn-download">Download</a>
-                    <form action="{% url 'delete_resume' resume.id %}" method="post" class="delete-form">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-delete">Delete</button>
-                    </form>
-                </div>
+      <h2>My Resumes</h2>
+      <div class="resume-list">
+        {% for resume in resumes %}
+        <div class="resume-card">
+          <div class="resume-info">
+            <h3>{{ resume.title }}</h3>
+            <div class="resume-meta">
+              <span class="updated-date">
+                Updated on {{ resume.updated_at|date:"n/j/Y" }}
+              </span>
             </div>
-            {% empty %}
-            <div class="no-resumes">
-                <p>You haven't created any resumes yet.</p>
-            </div>
-            {% endfor %}
+          </div>
+          <div class="resume-actions">
+            <a href="{% url 'resumes:edit_resume' resume.id %}" class="btn btn-edit">Edit</a>
+            <a href="{% url 'resumes:download_resume' resume.id %}" class="btn btn-download">
+              Download
+            </a>
+            <form action="{% url 'resumes:delete_resume' resume.id %}" method="post" class="delete-form">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-delete">Delete</button>
+            </form>
+          </div>
         </div>
+        {% empty %}
+        <div class="no-resumes">
+          <p>You haven't created any resumes yet.</p>
+        </div>
+        {% endfor %}
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
