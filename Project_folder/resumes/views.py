@@ -37,24 +37,30 @@ User = get_user_model()     # Gets your custom RegisterUser model
 
 # Resume Management Views
 @login_required
+@transaction.atomic
 def create_resume(request):
     if request.method == 'POST':
-        # Create new resume
-        resume = Resume.objects.create(
-            user=request.user,
-            title=request.POST.get('title', 'Untitled Resume')
-        )
-        
-        # Create basic details
-        BasicDetails.objects.create(
-            resume=resume,
-            full_name=request.POST.get('full_name', ''),
-            email=request.POST.get('email', ''),
-            phone=request.POST.get('phone', ''),
-            summary=request.POST.get('summary', '')
-        )
-        
-        return redirect('resumes:edit_resume', resume_id=resume.id)
+        try:
+            # Create new resume
+            resume = Resume.objects.create(
+                user=request.user,
+                title=request.POST.get('title', 'Untitled Resume')
+            )
+            
+            # Create basic details
+            BasicDetails.objects.create(
+                resume=resume,
+                full_name=request.POST.get('full_name', ''),
+                email=request.POST.get('email', ''),
+                phone=request.POST.get('phone', ''),
+                summary=request.POST.get('summary', '')
+            )
+            
+            return redirect('resumes:edit_resume', resume_id=resume.id)
+            
+        except Exception as e:
+            messages.error(request, f"Error creating resume: {str(e)}")
+            return redirect('resumes:create_resume')
     
     return render(request, 'resumes/create_resume.html', {
         'creating_new': True,
@@ -126,14 +132,16 @@ def _handle_form_submission(request, resume):
     return redirect('resumes:edit_resume', resume_id=resume.id)
 
 
+
 @login_required
 def delete_resume(request, resume_id):
     resume = get_object_or_404(Resume, id=resume_id, user=request.user)
     if request.method == 'POST':
         resume.delete()
         messages.success(request, "Resume deleted successfully!")
-        return redirect('resumes:create_resume')
-    return render(request, 'edit_resume.html', {'resume': resume})
+        return redirect('resumes:resume_list')
+    
+    return render(request, 'resumes/resume_list.html', {'resumes': Resume.objects.filter(user=request.user)})
 
 
 @login_required

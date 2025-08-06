@@ -10,7 +10,7 @@ urlpatterns = [
     # Single-Page Resume Builder
     path('resume/new/', views.create_resume, name='create_resume'),
     path('resume/<int:resume_id>/edit/', views.edit_resume, name='edit_resume'),
-    path('resume/<int:resume_id>/delete/', views.delete_resume, name='delete_resume'),
+    path('resume/delete/<int:resume_id>/', views.delete_resume, name='delete_resume'),
     path('resume/<int:resume_id>/download/', views.generate_pdf, name='download_resume'),
     
     # AJAX Endpoints
