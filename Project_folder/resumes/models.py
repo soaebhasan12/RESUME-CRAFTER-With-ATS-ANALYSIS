@@ -4,10 +4,10 @@ from accounts.models import User
 # Create your models here.
 class Resume(models.Model):
     TEMPLATE_CHOICES = [
-        ('template1', 'Professional Blue'),
-        ('template2', 'Modern Red'),
-        ('template3', 'Creative Green'),
-        ('template4', 'Minimalist Black'),
+        ('temp_1', 'Professional Blue'),
+        ('temp_2', 'Modern Red'),
+        ('temp_3', 'Creative Green'),
+        ('temp_4', 'Minimalist Black'),
     ]
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resumes')

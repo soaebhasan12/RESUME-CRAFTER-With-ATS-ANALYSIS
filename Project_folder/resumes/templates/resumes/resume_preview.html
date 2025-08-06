@@ -1,4 +1,28 @@
-<div class="resume-header">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="preview-container">
+    <div class="preview-header">
+        <h1>Preview Your Resume</h1>
+        {% comment %} <div class="template-name">Template: {{ template_name }}</div> {% endcomment %}
+    </div>
+    <div class="resume-preview">
+        {% include template_path %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+{% comment %} <div class="resume-header">
     <h1 class="resume-name">{{ basic_details.full_name|default:"Your Name" }}</h1>
     <div class="resume-title">{{ resume.title|default:"Your Profession" }}</div>
 </div>
@@ -40,4 +64,4 @@
             {% endif %}
         {% endfor %}
     </div>
-</div>
+</div> {% endcomment %}

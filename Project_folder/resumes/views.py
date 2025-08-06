@@ -39,26 +39,29 @@ User = get_user_model()     # Gets your custom RegisterUser model
 @login_required
 def create_resume(request):
     if request.method == 'POST':
-        title = request.POST.get('title', 'Untitled Resume')
-        template = request.POST.get('template', 'template1')
-        
+        # Create new resume
         resume = Resume.objects.create(
             user=request.user,
-            title=title,
-            template=template
+            title=request.POST.get('title', 'Untitled Resume')
         )
         
-        # Create basic details with default values
+        # Create basic details
         BasicDetails.objects.create(
             resume=resume,
-            full_name=request.user.username,
-            email=request.user.email
+            full_name=request.POST.get('full_name', ''),
+            email=request.POST.get('email', ''),
+            phone=request.POST.get('phone', ''),
+            summary=request.POST.get('summary', '')
         )
         
-        messages.success(request, "Resume created successfully!")
-        return redirect('edit_resume', resume_id=resume.id)
+        return redirect('resumes:edit_resume', resume_id=resume.id)
     
-    return render(request, 'resumes/create_resume.html')
+    return render(request, 'resumes/create_resume.html', {
+        'creating_new': True,
+        'resume': None
+    })
+
+
 
 
 @login_required
@@ -66,51 +69,61 @@ def edit_resume(request, resume_id):
     resume = get_object_or_404(Resume, id=resume_id, user=request.user)
     
     if request.method == 'POST':
-        # Handle form submissions for different sections
-        section = request.POST.get('section')
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            # Handle preview request
+            context = {
+                'resume': resume,
+                'basic_details': {
+                    'full_name': request.POST.get('full_name', ''),
+                    'email': request.POST.get('email', ''),
+                    'phone': request.POST.get('phone', ''),
+                    'summary': request.POST.get('summary', ''),
+                },
+                'skills': zip(
+                    request.POST.getlist('skill_names[]'),
+                    request.POST.getlist('skill_levels[]')
+                ),
+                'educations': zip(
+                    request.POST.getlist('education_institutions[]'),
+                    request.POST.getlist('education_degrees[]'),
+                    request.POST.getlist('education_fields[]'),
+                    request.POST.getlist('education_start_years[]'),
+                    request.POST.getlist('education_end_years[]'),
+                    request.POST.getlist('education_current[]'),
+                    request.POST.getlist('education_descriptions[]')
+                )
+            }
+            preview_html = render_to_string('resumes/resume_preview.html', context)
+            return JsonResponse({'preview_html': preview_html})
         
-        if section == 'basic_details':
-            basic_details = resume.basic_details
-            basic_details.full_name = request.POST.get('full_name', '')
-            basic_details.email = request.POST.get('email', '')
-            basic_details.phone = request.POST.get('phone', '')
-            basic_details.summary = request.POST.get('summary', '')
-            basic_details.save()
-            messages.success(request, "Basic details updated!")
-            
-        elif section == 'education':
-            education_id = request.POST.get('education_id')
-            if education_id:
-                education = get_object_or_404(Education, id=education_id, resume=resume)
-            else:
-                education = Education(resume=resume)
-                
-            education.institution = request.POST.get('institution', '')
-            education.degree = request.POST.get('degree', '')
-            education.field_of_study = request.POST.get('field_of_study', '')
-            education.start_year = request.POST.get('start_year', '')
-            education.end_year = request.POST.get('end_year', '')
-            education.currently_studying = request.POST.get('currently_studying') == 'on'
-            education.gpa = request.POST.get('gpa', '')
-            education.description = request.POST.get('description', '')
-            education.save()
-            messages.success(request, "Education updated!")
-            
-        # Add similar handling for other sections (experience, skills, etc.)
-        
-        return redirect('edit_resume', resume_id=resume.id)
+        # Handle form submission
+        return _handle_form_submission(request, resume)
     
-    context = {
+    return render(request, 'resumes/create_resume.html', {
         'resume': resume,
-        'educations': resume.educations.all(),
-        'experiences': resume.experiences.all(),
-        'skills': resume.skills.all(),
-        'projects': resume.projects.all(),
-        'certificates': resume.certificates.all(),
-        'achievements': resume.achievements.all(),
-        'social_links': resume.social_links.all(),
-    }
-    return render(request, 'edit_resume.html', context)
+        'creating_new': False
+    })
+
+def _handle_form_submission(request, resume):
+    section = request.POST.get('section')
+    
+    if section == 'basic_details':
+        basic_details = resume.basic_details
+        basic_details.full_name = request.POST.get('full_name', '')
+        basic_details.email = request.POST.get('email', '')
+        basic_details.phone = request.POST.get('phone', '')
+        basic_details.summary = request.POST.get('summary', '')
+        basic_details.save()
+    
+    elif section == 'skills':
+        # Handle skills updates
+        pass
+    
+    # Add other section handlers
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({'status': 'success'})
+    return redirect('resumes:edit_resume', resume_id=resume.id)
 
 
 @login_required
@@ -119,8 +132,8 @@ def delete_resume(request, resume_id):
     if request.method == 'POST':
         resume.delete()
         messages.success(request, "Resume deleted successfully!")
-        return redirect('resume_list')
-    return render(request, 'confirm_delete.html', {'resume': resume})
+        return redirect('resumes:create_resume')
+    return render(request, 'edit_resume.html', {'resume': resume})
 
 
 @login_required
@@ -146,7 +159,7 @@ def generate_pdf(request, resume_id):
         'social_links': resume.social_links.all(),
     }
 
-    html_string = render_to_string('resume_template.html', context)
+    html_string = render_to_string('resumes/resume_preview.html', context)
     css_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'resume.css')
     
     font_config = FontConfiguration()
@@ -227,10 +240,39 @@ def update_resume_template(request, resume_id):
 
 
 @login_required
-def preview_template(request):
-    template_name = request.GET.get('template', 'professional')
-    # Render a preview of the template
-    return render(request, f'resume/templates/{template_name}_preview.html')
+def preview_resume(request):
+    template_name = request.GET.get('template', 'resumes/resume_templates/temp_1')
+    
+    # Create sample data if no resume exists
+    if not Resume.objects.filter(user=request.user).exists():
+        context = {
+            'template_name': template_name,
+            'template_path': f'resumes/resume_templates/{template_name}.html',
+            'basic_details': {
+                'full_name': f"{request.user.first_name} {request.user.last_name}",
+                'email': request.user.email,
+                'phone': "+1234567890",
+                'summary': "Experienced professional with demonstrated skills..."
+            },
+            'skills': [("Python", "Advanced"), ("Django", "Expert")],
+            'educations': [("University", "Bachelor", "Computer Science", "2018", "2022", False, "Graduated with honors")],
+            'is_preview': True
+        }
+    else:
+        resume = Resume.objects.filter(user=request.user).first()
+        context = {
+            'template_name': template_name,
+            'template_path': f'resumes/resume_templates/{template_name}.html',
+            'resume': resume,
+            'basic_details': resume.basic_details,
+            'skills': [(skill.name, skill.category) for skill in resume.skills.all()],
+            'educations': [(edu.institution, edu.get_degree_display(), edu.field_of_study, 
+                          edu.start_year, edu.end_year, edu.currently_studying, edu.description) 
+                         for edu in resume.educations.all()],
+            'is_preview': True
+        }
+    
+    return render(request, 'resumes/resume_preview.html', context)
 
 
 @login_required

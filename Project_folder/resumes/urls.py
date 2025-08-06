@@ -16,7 +16,7 @@ urlpatterns = [
     # AJAX Endpoints
     path('resume/<int:resume_id>/update-template/', views.update_resume_template, name='update_template'),
     path('resume/<int:resume_id>/duplicate/', views.duplicate_resume, name='duplicate_resume'),
-    path('resume/preview/', views.preview_template, name='preview_template'),
+    path('resume/preview/', views.preview_resume, name='preview_resume'),
     
     # Resume List
     path('my-resumes/', views.resume_list, name='resume_list'),

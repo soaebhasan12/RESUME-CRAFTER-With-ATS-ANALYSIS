@@ -1,7 +1,49 @@
+:root {
+  --primary-color: #4361ee;
+  --secondary-color: #3a0ca3;
+  --accent-color: #4cc9f0;
+  --background-color: #f8f9ff;
+  --form-bg: #ffffff;
+  --text-color: #2b2d42;
+  --light-text: #6b7280;
+  --border-color: #e2e8f0;
+  --section-bg: #f8fafc;
+  --hover-border-light: #4cc9f0;
+  --hover-border-dark: #3a0ca3;
+  --card-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --border-color: #2d3748;
+  --form-bg: #1a202c;
+  --background-color: #121826;
+  --text-color: #f7fafc;
+  --light-text: #a0aec0;
+  --section-bg: #181f2a;
+  --card-bg: #1a202c;
+}
+
+.main-container {
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.resume-list li:hover {
+    background-color: var(--hover-border-light);
+    color: var(--text-color);
+}
+    
 .resume-dashboard {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .header {
@@ -13,7 +55,7 @@
 
 .header h1 {
     font-size: 2rem;
-    color: #333;
+    color: var(--text-color);
 }
 
 .btn {
@@ -26,13 +68,13 @@
 }
 
 .btn-primary {
-    background-color: #4a6bff;
+    background-color: var(--primary-color);
     color: white;
     border: none;
 }
 
 .btn-primary:hover {
-    background-color: #3a5bef;
+    background-color: var(--secondary-color);
 }
 
 .templates-section {
@@ -41,7 +83,7 @@
 
 .templates-section h2 {
     font-size: 1.5rem;
-    color: #444;
+    color: var(--text-color);
     margin-bottom: 1rem;
 }
 
@@ -52,11 +94,12 @@
 }
 
 .template-card {
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
+    background-color: var(--card-bg);
 }
 
 .template-card:hover {
@@ -83,18 +126,19 @@
 }
 
 .minimalist-black {
-    background-color: #f5f5f5;
+    background-color: var(--section-bg);
 }
 
 .template-name {
     padding: 1rem;
     text-align: center;
     font-weight: 500;
+    color: var(--text-color);
 }
 
 .resumes-section h2 {
     font-size: 1.5rem;
-    color: #444;
+    color: var(--text-color);
     margin-bottom: 1rem;
 }
 
@@ -108,21 +152,21 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    background-color: white;
+    background-color: var(--card-bg);
 }
 
 .resume-info h3 {
     margin: 0;
     font-size: 1.2rem;
-    color: #333;
+    color: var(--text-color);
 }
 
 .resume-meta {
     margin-top: 0.5rem;
     font-size: 0.9rem;
-    color: #666;
+    color: var(--light-text);
 }
 
 .resume-actions {
@@ -131,13 +175,13 @@
 }
 
 .btn-edit {
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ddd;
+    background-color: var(--section-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .btn-edit:hover {
-    background-color: #e0e0e0;
+    background-color: var(--form-bg);
 }
 
 .btn-download {
@@ -163,9 +207,10 @@
 .no-resumes {
     text-align: center;
     padding: 2rem;
-    color: #666;
-    border: 1px dashed #ddd;
+    color: var(--light-text);
+    border: 1px dashed var(--border-color);
     border-radius: 8px;
+    background-color: var(--card-bg);
 }
 
 @media (max-width: 768px) {
@@ -178,5 +223,24 @@
     .resume-actions {
         width: 100%;
         justify-content: flex-end;
+    }
+}
+
+/* Dark mode specific adjustments */
+[data-theme="dark"] {
+    .template-card:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .professional-blue {
+        background-color: #1e3a8a;
+    }
+    
+    .modern-red {
+        background-color: #7f1d1d;
+    }
+    
+    .creative-green {
+        background-color: #14532d;
     }
 }

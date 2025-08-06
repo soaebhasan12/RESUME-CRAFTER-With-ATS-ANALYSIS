@@ -1,0 +1,203 @@
+{# templates/resumes/resume_templates/temp_1.html #}
+{% extends "resumes/resume_base.html" %}
+{% load static %}
+
+
+{% block title %}Preview - {{ resume.title }}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'resumes/resume_template_css/temp_1.css' %}">
+{% endblock %}
+
+{% block resume_content %}
+<div class="preview-page-container">
+    <!-- Preview Header with Template Info -->
+    {% comment %} <div class="preview-controls">
+        <h1>Preview: {{ resume.title }}</h1>
+        <div class="template-info">
+            <span class="template-badge">{{ template_name|title }} Template</span>
+        </div>
+    </div> {% endcomment %}
+
+    <!-- Resume Preview Container -->
+    <div class="resume-preview-container">
+        <div class="resume-container {% if template_name %}template-{{ template_name }}{% endif %}">
+            
+
+            <div class="resume-body">
+                <!-- Left Column -->
+                <div class="left-column">
+                    {% if resume.basic_details.email or resume.basic_details.phone or resume.social_links.all %}
+                    <section class="contact-section">
+                        <h2>Contact</h2>
+                        <ul class="contact-list">
+                            {% if resume.basic_details.email %}
+                            <li><span class="icon">✉️</span> {{ resume.basic_details.email }}</li>
+                            {% endif %}
+                            {% if resume.basic_details.phone %}
+                            <li><span class="icon">📱</span> {{ resume.basic_details.phone }}</li>
+                            {% endif %}
+                            {% for link in resume.social_links.all %}
+                            <li>
+                                <span class="icon">🔗</span>
+                                <a href="{{ link.url }}" target="_blank">{{ link.platform }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    {% endif %}
+
+                    {% if resume.skills.all %}
+                    <section class="skills-section">
+                        <h2>Skills</h2>
+                        <div class="skills-container">
+                            {% for skill in resume.skills.all %}
+                            <div class="skill-item">
+                                <span class="skill-name">{{ skill.name }}</span>
+                                {% if skill.category %}
+                                <span class="skill-category">{{ skill.get_category_display }}</span>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                    {% endif %}
+
+                    {% if resume.certificates.all %}
+                    <section class="certificates-section">
+                        <h2>Certifications</h2>
+                        <ul class="certificate-list">
+                            {% for cert in resume.certificates.all %}
+                            <li>
+                                <h3>{{ cert.title }}</h3>
+                                <p class="issuer">{{ cert.issuing_organization }}</p>
+                                {% if cert.issue_date %}
+                                <p class="date">
+                                    {{ cert.issue_date|date:"M Y" }}{% if cert.expiration_date %} - {{ cert.expiration_date|date:"M Y" }}{% endif %}
+                                </p>
+                                {% endif %}
+                                {% if cert.credential_id %}
+                                <p class="credential">Credential ID: {{ cert.credential_id }}</p>
+                                {% endif %}
+                                {% if cert.description %}
+                                <p class="description">{{ cert.description }}</p>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    {% endif %}
+                </div>
+
+                <!-- Right Column -->
+                <div class="right-column">
+                    {% if resume.experiences.all %}
+                    <section class="experience-section">
+                        <h2>Experience</h2>
+                        <ul class="experience-list">
+                            {% for exp in resume.experiences.all %}
+                            <li>
+                                <div class="experience-header">
+                                    <h3>{{ exp.position }}</h3>
+                                    <p class="company">{{ exp.organization }}</p>
+                                    <p class="date">
+                                        {{ exp.start_date|date:"M Y" }} - 
+                                        {% if exp.currently_working %}Present{% else %}{{ exp.end_date|date:"M Y" }}{% endif %}
+                                    </p>
+                                </div>
+                                {% if exp.description %}
+                                <p class="experience-description">{{ exp.description }}</p>
+                                {% endif %}
+                                {% if exp.responsibilities.all %}
+                                <ul class="responsibilities">
+                                    {% for resp in exp.responsibilities.all %}
+                                    <li>{{ resp.description }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    {% endif %}
+
+                    {% if resume.educations.all %}
+                    <section class="education-section">
+                        <h2>Education</h2>
+                        <ul class="education-list">
+                            {% for edu in resume.educations.all %}
+                            <li>
+                                <h3>{{ edu.get_degree_display }} in {{ edu.field_of_study }}</h3>
+                                <p class="institution">{{ edu.institution }}</p>
+                                <p class="date">
+                                    {{ edu.start_year }} - 
+                                    {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}
+                                    {% if edu.gpa or edu.percentage %}
+                                    • 
+                                    {% if edu.gpa %}GPA: {{ edu.gpa }}{% endif %}
+                                    {% if edu.gpa and edu.percentage %}/{% endif %}
+                                    {% if edu.percentage %}{{ edu.percentage }}%{% endif %}
+                                    {% endif %}
+                                </p>
+                                {% if edu.description %}
+                                <p class="education-description">{{ edu.description }}</p>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    {% endif %}
+
+                    {% if resume.projects.all %}
+                    <section class="projects-section">
+                        <h2>Projects</h2>
+                        <ul class="project-list">
+                            {% for project in resume.projects.all %}
+                            <li>
+                                <div class="project-header">
+                                    <h3>{{ project.title }}</h3>
+                                    {% if project.start_date %}
+                                    <p class="date">
+                                        {{ project.start_date|date:"M Y" }}{% if project.end_date %} - {{ project.end_date|date:"M Y" }}{% endif %}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                                <p class="project-description">{{ project.description }}</p>
+                                {% if project.project_url %}
+                                <a href="{{ project.project_url }}" target="_blank" class="project-link">View Project</a>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    {% endif %}
+
+                    {% if resume.achievements.all %}
+                    <section class="achievements-section">
+                        <h2>Achievements</h2>
+                        <ul class="achievement-list">
+                            {% for achievement in resume.achievements.all %}
+                            <li>
+                                <h3>{{ achievement.title }}</h3>
+                                {% if achievement.date %}
+                                <p class="date">{{ achievement.date|date:"M Y" }}</p>
+                                {% endif %}
+                                {% if achievement.description %}
+                                <p class="achievement-description">{{ achievement.description }}</p>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    {% endif %}
+                </div>
+                {# templates/resumes/resume_preview.html #}
+                <div class="preview-actions">
+                    <a href="{% url 'resumes:resume_list' %}" class="btn btn-secondary">Back to Templates</a>
+                    <a href="{% url 'resumes:create_resume' %}?template={{ template_name }}" class="btn btn-primary">Use This Template</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

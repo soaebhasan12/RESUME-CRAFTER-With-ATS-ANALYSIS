@@ -1,0 +1,11 @@
+{# templates/resumes/resume_base.html #}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% block resume_content %}{% endblock %}
+</body>
+</html>
