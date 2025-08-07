@@ -6,19 +6,11 @@
 {% block title %}Preview - {{ resume.title }}{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'resumes/resume_template_css/temp_1.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'resumes/resume_template_css/temp_1.css' %}"> {% endcomment %}
 {% endblock %}
 
 {% block resume_content %}
 <div class="preview-page-container">
-    <!-- Preview Header with Template Info -->
-    {% comment %} <div class="preview-controls">
-        <h1>Preview: {{ resume.title }}</h1>
-        <div class="template-info">
-            <span class="template-badge">{{ template_name|title }} Template</span>
-        </div>
-    </div> {% endcomment %}
-
     <!-- Resume Preview Container -->
     <div class="resume-preview-container">
         <div class="resume-container {% if template_name %}template-{{ template_name }}{% endif %}">
@@ -191,13 +183,13 @@
                     </section>
                     {% endif %}
                 </div>
-                {# templates/resumes/resume_preview.html #}
-                <div class="preview-actions">
-                    <a href="{% url 'resumes:resume_list' %}" class="btn btn-secondary">Back to Templates</a>
-                    <a href="{% url 'resumes:create_resume' %}?template={{ template_name }}" class="btn btn-primary">Use This Template</a>
-                </div>
             </div>
         </div>
     </div>
+    {% comment %} {# templates/resumes/resume_preview.html #}
+    <div class="preview-actions">
+        <a href="{% url 'resumes:resume_list' %}" class="btn btn-secondary">Back to Templates</a>
+        <a href="{% url 'resumes:create_resume' %}?template={{ template_name }}" class="btn btn-primary">Use This Template</a>
+    </div> {% endcomment %}
 </div>
 {% endblock %}

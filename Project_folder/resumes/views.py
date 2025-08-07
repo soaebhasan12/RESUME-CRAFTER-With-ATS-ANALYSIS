@@ -37,34 +37,248 @@ User = get_user_model()     # Gets your custom RegisterUser model
 
 # Resume Management Views
 @login_required
-@transaction.atomic
 def create_resume(request):
     if request.method == 'POST':
         try:
-            # Create new resume
-            resume = Resume.objects.create(
-                user=request.user,
-                title=request.POST.get('title', 'Untitled Resume')
-            )
+            # Create or update resume
+            resume_id = request.POST.get('resume_id')
+            if resume_id:
+                resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+                resume.title = request.POST.get('title', 'Untitled Resume')
+                resume.template = request.POST.get('template', 'temp_1')
+                resume.save()
+            else:
+                resume = Resume.objects.create(
+                    user=request.user,
+                    title=request.POST.get('title', 'Untitled Resume'),
+                    template=request.POST.get('template', 'temp_1')
+                )
             
-            # Create basic details
-            BasicDetails.objects.create(
+            # Create or update basic details
+            basic_details, created = BasicDetails.objects.update_or_create(
                 resume=resume,
-                full_name=request.POST.get('full_name', ''),
-                email=request.POST.get('email', ''),
-                phone=request.POST.get('phone', ''),
-                summary=request.POST.get('summary', '')
+                defaults={
+                    'full_name': request.POST.get('full_name', ''),
+                    'email': request.POST.get('email', ''),
+                    'phone': request.POST.get('phone', ''),
+                    'summary': request.POST.get('summary', ''),
+                    'avatar': request.POST.get('avatar', None)
+                }
             )
             
+            # Handle skills
+            existing_skill_ids = [int(id) for id in request.POST.getlist('skill_ids[]') if id]
+            Skill.objects.filter(resume=resume).exclude(id__in=existing_skill_ids).delete()
+            
+            skill_names = request.POST.getlist('skill_names[]')
+            skill_categories = request.POST.getlist('skill_categories[]')
+            
+            for i, skill_name in enumerate(skill_names):
+                if skill_name:  # Only save if name is provided
+                    skill_id = request.POST.getlist('skill_ids[]')[i] if i < len(request.POST.getlist('skill_ids[]')) else None
+                    if skill_id:
+                        skill = Skill.objects.get(id=skill_id)
+                        skill.name = skill_name
+                        skill.category = skill_categories[i] if i < len(skill_categories) else None
+                        skill.save()
+                    else:
+                        Skill.objects.create(
+                            resume=resume,
+                            name=skill_name,
+                            category=skill_categories[i] if i < len(skill_categories) else None
+                        )
+            
+            # Handle education
+            existing_edu_ids = [int(id) for id in request.POST.getlist('education_ids[]') if id]
+            Education.objects.filter(resume=resume).exclude(id__in=existing_edu_ids).delete()
+            
+            institutions = request.POST.getlist('education_institutions[]')
+            degrees = request.POST.getlist('education_degrees[]')
+            fields = request.POST.getlist('education_fields[]')
+            start_years = request.POST.getlist('education_start_years[]')
+            end_years = request.POST.getlist('education_end_years[]')
+            current_statuses = request.POST.getlist('education_current[]')
+            descriptions = request.POST.getlist('education_descriptions[]')
+            gpas = request.POST.getlist('education_gpas[]')
+            percentages = request.POST.getlist('education_percentages[]')
+            
+            for i, institution in enumerate(institutions):
+                if institution:
+                    edu_id = request.POST.getlist('education_ids[]')[i] if i < len(request.POST.getlist('education_ids[]')) else None
+                    current = True if f'education_current_{i}' in request.POST else False
+                    
+                    edu_data = {
+                        'institution': institution,
+                        'degree': degrees[i] if i < len(degrees) else 'bachelors',
+                        'field_of_study': fields[i] if i < len(fields) else '',
+                        'start_year': start_years[i] if i < len(start_years) else None,
+                        'end_year': end_years[i] if i < len(end_years) and not current else None,
+                        'currently_studying': current,
+                        'description': descriptions[i] if i < len(descriptions) else '',
+                        'gpa': gpas[i] if i < len(gpas) and gpas[i] else None,
+                        'percentage': percentages[i] if i < len(percentages) and percentages[i] else None
+                    }
+                    
+                    if edu_id:
+                        Education.objects.filter(id=edu_id).update(**edu_data)
+                    else:
+                        Education.objects.create(resume=resume, **edu_data)
+            
+            # Handle experiences
+            existing_exp_ids = [int(id) for id in request.POST.getlist('experience_ids[]') if id]
+            Experience.objects.filter(resume=resume).exclude(id__in=existing_exp_ids).delete()
+            
+            organizations = request.POST.getlist('experience_organizations[]')
+            positions = request.POST.getlist('experience_positions[]')
+            start_dates = request.POST.getlist('experience_start_dates[]')
+            end_dates = request.POST.getlist('experience_end_dates[]')
+            current_jobs = request.POST.getlist('experience_current[]')
+            exp_descriptions = request.POST.getlist('experience_descriptions[]')
+            
+            for i, organization in enumerate(organizations):
+                if organization:
+                    exp_id = request.POST.getlist('experience_ids[]')[i] if i < len(request.POST.getlist('experience_ids[]')) else None
+                    current = True if f'experience_current_{i}' in request.POST else False
+                    
+                    exp_data = {
+                        'organization': organization,
+                        'position': positions[i] if i < len(positions) else '',
+                        'start_date': start_dates[i] if i < len(start_dates) else None,
+                        'end_date': end_dates[i] if i < len(end_dates) and not current else None,
+                        'currently_working': current,
+                        'description': exp_descriptions[i] if i < len(exp_descriptions) else ''
+                    }
+                    
+                    if exp_id:
+                        Experience.objects.filter(id=exp_id).update(**exp_data)
+                    else:
+                        exp = Experience.objects.create(resume=resume, **exp_data)
+                        
+                        # Handle responsibilities
+                        resp_descriptions = request.POST.getlist(f'responsibilities_{i}[]')
+                        for desc in resp_descriptions:
+                            if desc:
+                                Responsibility.objects.create(
+                                    experience=exp,
+                                    description=desc
+                                )
+            
+            # Handle projects
+            existing_project_ids = [int(id) for id in request.POST.getlist('project_ids[]') if id]
+            Project.objects.filter(resume=resume).exclude(id__in=existing_project_ids).delete()
+            
+            project_titles = request.POST.getlist('project_titles[]')
+            project_start_dates = request.POST.getlist('project_start_dates[]')
+            project_end_dates = request.POST.getlist('project_end_dates[]')
+            project_urls = request.POST.getlist('project_urls[]')
+            project_descriptions = request.POST.getlist('project_descriptions[]')
+            
+            for i, title in enumerate(project_titles):
+                if title:
+                    project_id = request.POST.getlist('project_ids[]')[i] if i < len(request.POST.getlist('project_ids[]')) else None
+                    
+                    project_data = {
+                        'title': title,
+                        'start_date': project_start_dates[i] if i < len(project_start_dates) else None,
+                        'end_date': project_end_dates[i] if i < len(project_end_dates) else None,
+                        'project_url': project_urls[i] if i < len(project_urls) else '',
+                        'description': project_descriptions[i] if i < len(project_descriptions) else ''
+                    }
+                    
+                    if project_id:
+                        Project.objects.filter(id=project_id).update(**project_data)
+                    else:
+                        Project.objects.create(resume=resume, **project_data)
+            
+            # Handle certificates
+            existing_cert_ids = [int(id) for id in request.POST.getlist('certificate_ids[]') if id]
+            Certificate.objects.filter(resume=resume).exclude(id__in=existing_cert_ids).delete()
+            
+            cert_titles = request.POST.getlist('certificate_titles[]')
+            issuing_orgs = request.POST.getlist('certificate_issuers[]')
+            issue_dates = request.POST.getlist('certificate_issue_dates[]')
+            expiry_dates = request.POST.getlist('certificate_expiry_dates[]')
+            credential_ids = request.POST.getlist('certificate_credential_ids[]')
+            credential_urls = request.POST.getlist('certificate_urls[]')
+            cert_descriptions = request.POST.getlist('certificate_descriptions[]')
+            
+            for i, title in enumerate(cert_titles):
+                if title:
+                    cert_id = request.POST.getlist('certificate_ids[]')[i] if i < len(request.POST.getlist('certificate_ids[]')) else None
+                    
+                    cert_data = {
+                        'title': title,
+                        'issuing_organization': issuing_orgs[i] if i < len(issuing_orgs) else '',
+                        'issue_date': issue_dates[i] if i < len(issue_dates) else None,
+                        'expiration_date': expiry_dates[i] if i < len(expiry_dates) else None,
+                        'credential_id': credential_ids[i] if i < len(credential_ids) else '',
+                        'credential_url': credential_urls[i] if i < len(credential_urls) else '',
+                        'description': cert_descriptions[i] if i < len(cert_descriptions) else ''
+                    }
+                    
+                    if cert_id:
+                        Certificate.objects.filter(id=cert_id).update(**cert_data)
+                    else:
+                        Certificate.objects.create(resume=resume, **cert_data)
+            
+            # Handle achievements
+            existing_ach_ids = [int(id) for id in request.POST.getlist('achievement_ids[]') if id]
+            Achievement.objects.filter(resume=resume).exclude(id__in=existing_ach_ids).delete()
+            
+            achievement_titles = request.POST.getlist('achievement_titles[]')
+            achievement_dates = request.POST.getlist('achievement_dates[]')
+            achievement_descriptions = request.POST.getlist('achievement_descriptions[]')
+            
+            for i, title in enumerate(achievement_titles):
+                if title:
+                    ach_id = request.POST.getlist('achievement_ids[]')[i] if i < len(request.POST.getlist('achievement_ids[]')) else None
+                    
+                    ach_data = {
+                        'title': title,
+                        'date': achievement_dates[i] if i < len(achievement_dates) else None,
+                        'description': achievement_descriptions[i] if i < len(achievement_descriptions) else ''
+                    }
+                    
+                    if ach_id:
+                        Achievement.objects.filter(id=ach_id).update(**ach_data)
+                    else:
+                        Achievement.objects.create(resume=resume, **ach_data)
+            
+            # Handle social links
+            existing_link_ids = [int(id) for id in request.POST.getlist('social_link_ids[]') if id]
+            SocialLink.objects.filter(resume=resume).exclude(id__in=existing_link_ids).delete()
+            
+            platforms = request.POST.getlist('social_platforms[]')
+            urls = request.POST.getlist('social_urls[]')
+            
+            for i, platform in enumerate(platforms):
+                if platform and urls[i]:
+                    link_id = request.POST.getlist('social_link_ids[]')[i] if i < len(request.POST.getlist('social_link_ids[]')) else None
+                    
+                    if link_id:
+                        SocialLink.objects.filter(id=link_id).update(
+                            platform=platform,
+                            url=urls[i]
+                        )
+                    else:
+                        SocialLink.objects.create(
+                            resume=resume,
+                            platform=platform,
+                            url=urls[i]
+                        )
+            
+            messages.success(request, "Resume saved successfully!")
             return redirect('resumes:edit_resume', resume_id=resume.id)
             
         except Exception as e:
-            messages.error(request, f"Error creating resume: {str(e)}")
+            messages.error(request, f"Error saving resume: {str(e)}")
             return redirect('resumes:create_resume')
     
+    # For GET request
     return render(request, 'resumes/create_resume.html', {
         'creating_new': True,
-        'resume': None
+        'resume': None,
+        'template_choices': Resume.TEMPLATE_CHOICES
     })
 
 
@@ -249,36 +463,53 @@ def update_resume_template(request, resume_id):
 
 @login_required
 def preview_resume(request):
-    template_name = request.GET.get('template', 'resumes/resume_templates/temp_1')
+    template_name = request.GET.get('template', 'temp_1_preview')
     
-    # Create sample data if no resume exists
-    if not Resume.objects.filter(user=request.user).exists():
-        context = {
-            'template_name': template_name,
-            'template_path': f'resumes/resume_templates/{template_name}.html',
-            'basic_details': {
-                'full_name': f"{request.user.first_name} {request.user.last_name}",
-                'email': request.user.email,
-                'phone': "+1234567890",
-                'summary': "Experienced professional with demonstrated skills..."
-            },
-            'skills': [("Python", "Advanced"), ("Django", "Expert")],
-            'educations': [("University", "Bachelor", "Computer Science", "2018", "2022", False, "Graduated with honors")],
-            'is_preview': True
-        }
-    else:
-        resume = Resume.objects.filter(user=request.user).first()
-        context = {
-            'template_name': template_name,
-            'template_path': f'resumes/resume_templates/{template_name}.html',
-            'resume': resume,
-            'basic_details': resume.basic_details,
-            'skills': [(skill.name, skill.category) for skill in resume.skills.all()],
-            'educations': [(edu.institution, edu.get_degree_display(), edu.field_of_study, 
-                          edu.start_year, edu.end_year, edu.currently_studying, edu.description) 
-                         for edu in resume.educations.all()],
-            'is_preview': True
-        }
+    # Create sample resume data structure
+    sample_resume = {
+        'title': "Sample Resume",
+        'template': template_name,
+        'basic_details': {
+            'full_name': "John Doe",
+            'email': "john.doe@example.com",
+            'phone': "+1 (555) 123-4567",
+            'summary': "Experienced professional with 5+ years in the industry. Skilled in various technologies and passionate about creating efficient solutions."
+        },
+        'skills': [
+            {'name': "Python", 'category': "technical"},
+            {'name': "Project Management", 'category': "soft"},
+            {'name': "English", 'category': "language"}
+        ],
+        'educations': [{
+            'institution': "University of Technology",
+            'degree': "bachelors",
+            'field_of_study': "Computer Science",
+            'start_year': "2015",
+            'end_year': "2019",
+            'currently_studying': False,
+            'gpa': "3.8",
+            'description': "Graduated with honors"
+        }],
+        'experiences': [{
+            'organization': "Tech Solutions Inc.",
+            'position': "Senior Developer",
+            'start_date': "2020-01-01",
+            'currently_working': True,
+            'description': "Led a team of 5 developers to deliver enterprise solutions",
+            'responsibilities': [
+                "Developed core application features",
+                "Mentored junior team members",
+                "Implemented CI/CD pipeline"
+            ]
+        }]
+    }
+    
+    context = {
+        'template_name': template_name,
+        'template_path': f'resumes/resume_templates/{template_name}.html',
+        'resume': sample_resume,
+        'is_preview': True
+    }
     
     return render(request, 'resumes/resume_preview.html', context)
 

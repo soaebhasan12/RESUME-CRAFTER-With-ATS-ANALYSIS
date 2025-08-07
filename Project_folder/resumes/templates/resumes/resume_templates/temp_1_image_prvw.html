@@ -1,0 +1,81 @@
+{% extends "resumes/resume_base.html" %}
+{% load static %}
+
+{% block title %}Preview - {{ resume.title|default:"Professional Resume Template" }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .resume-image-preview {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .template-preview-image {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .resume-image-preview:hover .image-overlay {
+        opacity: 1;
+    }
+    
+    .use-template-btn {
+        padding: 12px 24px;
+        background: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .use-template-btn:hover {
+        background: #2980b9;
+        transform: translateY(-2px);
+    }
+    
+    .preview-actions {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block resume_content %}
+<div class="preview-page-container">
+    <div class="resume-image-preview">
+        <img src="{% static 'resumes/resume_templates/resume_temp_1.jpg' %}" 
+             alt="Professional Resume Template Preview" 
+             class="template-preview-image">
+        
+        <div class="image-overlay">
+            <a href="{% url 'resumes:create_resume' %}?template={{ template_name }}" 
+               class="btn btn-primary use-template-btn">
+               Use This Template
+            </a>
+        </div>
+    </div>
+
+    <div class="preview-actions">
+        <a href="{% url 'resumes:resume_list' %}" class="btn btn-secondary">Back to Templates</a>
+    </div>
+</div>
+{% endblock %}

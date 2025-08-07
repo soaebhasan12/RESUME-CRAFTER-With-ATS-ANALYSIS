@@ -6,7 +6,7 @@
   --preview-shadow: var(--shadow-color);
   --preview-header-bg: var(--section-bg);
   
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 0 auto;
   padding: 2rem;
   background-color: var(--preview-bg);
