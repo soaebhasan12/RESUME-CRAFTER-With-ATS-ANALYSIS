@@ -9,7 +9,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="{% static 'resumes/create_resume.css' %}?v=1.1">
+<link rel="stylesheet" href="{% static 'resumes/create_resume.css' %}?v=2.0">
 {% endblock %}
 
 {% block content %}
@@ -17,163 +17,541 @@
     <div class="row g-0">
         <!-- Left Sidebar - Form Controls -->
         <div class="col-lg-4 col-md-5 sidebar">
-            <div class="sidebar-header">
-                <h2><i class="bi bi-menu-button"></i> Resume Details</h2>
+            <div class="sidebar-header d-flex justify-content-between align-items-center">
+                <h2 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i> Resume Builder</h2>
                 <button class="btn btn-sm btn-outline-secondary toggle-preview">
-                    <i class="bi bi-layout-sidebar-inset-reverse"></i>
+                    <i class="bi bi-eye"></i> Toggle Preview
                 </button>
             </div>
             
-            {% comment %} <form id="resumeForm" method="post" action="{% url 'resumes:create_resume' resume.id %}" enctype="multipart/form-data"> {% endcomment %}
-            <form id="resumeForm" method="post" action="{% url 'resumes:create_resume' %}" enctype="multipart/form-data">
+            <div class="sidebar-nav mb-3">
+                <div class="nav nav-pills" id="resume-sections-tab" role="tablist">
+                    <button class="nav-link active" id="basic-tab" data-bs-toggle="pill" data-bs-target="#basic" type="button">
+                        <i class="bi bi-person"></i>
+                    </button>
+                    <button class="nav-link" id="skills-tab" data-bs-toggle="pill" data-bs-target="#skills" type="button">
+                        <i class="bi bi-tools"></i>
+                    </button>
+                    <button class="nav-link" id="education-tab" data-bs-toggle="pill" data-bs-target="#education" type="button">
+                        <i class="bi bi-mortarboard"></i>
+                    </button>
+                    <button class="nav-link" id="experience-tab" data-bs-toggle="pill" data-bs-target="#experience" type="button">
+                        <i class="bi bi-briefcase"></i>
+                    </button>
+                    <button class="nav-link" id="projects-tab" data-bs-toggle="pill" data-bs-target="#projects" type="button">
+                        <i class="bi bi-kanban"></i>
+                    </button>
+                    <button class="nav-link" id="certificates-tab" data-bs-toggle="pill" data-bs-target="#certificates" type="button">
+                        <i class="bi bi-award"></i>
+                    </button>
+                    <button class="nav-link" id="achievements-tab" data-bs-toggle="pill" data-bs-target="#achievements" type="button">
+                        <i class="bi bi-trophy"></i>
+                    </button>
+                    <button class="nav-link" id="social-tab" data-bs-toggle="pill" data-bs-target="#social" type="button">
+                        <i class="bi bi-link-45deg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <form id="resumeForm" method="post" action="{% url 'resumes:create_resume' %}" enctype="multipart/form-data" class="tab-content">
                 {% csrf_token %}
-                <input type="hidden" name="section" value="basic_details">
                 
-                <!-- Basic Details Section -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#basicDetails">
-                            <i class="bi bi-person me-2"></i> Basic Details
-                        </button>
-                    </h2>
-                    <div id="basicDetails" class="accordion-collapse collapse show">
-                        <div class="accordion-body">
+                <!-- Basic Information Section -->
+                <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-person me-2"></i> Basic Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Resume Title -->
                             <div class="mb-3">
-                                <label class="form-label">Resume Title</label>
-                                <input type="text" class="form-control" name="title" value="{{ resume.title }}">
+                                <label class="form-label">Resume Title*</label>
+                                <input type="text" class="form-control" name="title" value="{{ resume.title }}" required
+                                    placeholder="e.g. 'John Doe - Software Engineer Resume'">
                             </div>
+
+                            
+                            <!-- Full Name -->
                             <div class="mb-3">
-                                <label class="form-label">Full Name</label>
-                                <input type="text" class="form-control" name="full_name" value="{{ resume.basic_details.full_name }}">
+                                <label class="form-label">Full Name*</label>
+                                <input type="text" class="form-control" name="full_name" value="{{ resume.basic_details.full_name }}" 
+                                    required placeholder="Your full name">
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" value="{{ resume.basic_details.email }}">
+                            
+                            <!-- Contact Information Row -->
+                            <div class="row g-2">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email*</label>
+                                    <input type="email" class="form-control" name="email" value="{{ resume.basic_details.email }}" 
+                                        required placeholder="your.email@example.com">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone*</label>
+                                    <input type="tel" class="form-control" name="phone" value="{{ resume.basic_details.phone }}" 
+                                        required placeholder="+1 (123) 456-7890">
+                                </div>
                             </div>
+                            
+                            <!-- Profile Photo -->
                             <div class="mb-3">
-                                <label class="form-label">Phone</label>
-                                <input type="tel" class="form-control" name="phone" value="{{ resume.basic_details.phone }}">
+                                <label class="form-label">Profile Photo</label>
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <input type="file" class="form-control" id="avatarInput" name="avatar" accept="image/*">
+                                    </div>
+                                    {% if resume.basic_details.avatar %}
+                                        <div class="ms-3">
+                                            <img src="{{ resume.basic_details.avatar }}" alt="Current profile photo" 
+                                                class="rounded-circle" width="40" height="40" id="currentAvatar">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted">Recommended size: 200x200 pixels (square)</small>
+                                <div class="mt-2" id="avatarPreviewContainer" style="display: none;">
+                                    <img id="avatarPreview" class="rounded-circle" width="80" height="80" style="object-fit: cover;">
+                                </div>
                             </div>
+                            
+                            <!-- Professional Summary -->
                             <div class="mb-3">
-                                <label class="form-label">Summary</label>
-                                <textarea class="form-control" name="summary" rows="4">{{ resume.basic_details.summary }}</textarea>
+                                <label class="form-label">Professional Summary*</label>
+                                <textarea class="form-control" name="summary" rows="4" required
+                                        placeholder="Briefly describe your professional background, skills, and career goals (3-5 sentences)">{{ resume.basic_details.summary }}</textarea>
+                                <div class="d-flex justify-content-between mt-1">
+                                    <small class="text-muted">Keep it concise and impactful</small>
+                                    <small class="text-muted"><span id="summaryCounter">0</span>/300 characters</small>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Skills Section -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#skillsSection">
-                            <i class="bi bi-tools me-2"></i> Skills & Expertise
-                        </button>
-                    </h2>
-                    <div id="skillsSection" class="accordion-collapse collapse">
-                        <div class="accordion-body">
+                <div class="tab-pane fade" id="skills" role="tabpanel">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-tools me-2"></i> Skills & Expertise</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="addSkillBtn">
+                                <i class="bi bi-plus"></i> Add Skill
+                            </button>
+                        </div>
+                        <div class="card-body">
                             <div id="skillsContainer">
                                 {% for skill in resume.skills.all %}
-                                <div class="skill-item mb-3">
+                                <div class="skill-item mb-3 p-3 border rounded">
                                     <input type="hidden" name="skill_ids[]" value="{{ skill.id }}">
-                                    <div class="d-flex">
-                                        <input type="text" class="form-control me-2" name="skill_names[]" value="{{ skill.name }}">
-                                        <select class="form-select" name="skill_levels[]" style="width: 120px;">
-                                            <option value="beginner" {% if skill.level == 'beginner' %}selected{% endif %}>Beginner</option>
-                                            <option value="intermediate" {% if skill.level == 'intermediate' %}selected{% endif %}>Intermediate</option>
-                                            <option value="advanced" {% if skill.level == 'advanced' %}selected{% endif %}>Advanced</option>
-                                            <option value="expert" {% if skill.level == 'expert' %}selected{% endif %}>Expert</option>
-                                        </select>
-                                        <button type="button" class="btn btn-sm btn-outline-danger ms-2 remove-skill"><i class="bi bi-trash"></i></button>
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Skill Name*</label>
+                                            <input type="text" class="form-control" name="skill_names[]" value="{{ skill.name }}" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Category</label>
+                                            <select class="form-select" name="skill_categories[]">
+                                                {% for value, display in SKILL_CATEGORIES %}
+                                                    <option value="{{ value }}" {% if skill.category == value %}selected{% endif %}>{{ display }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-end">
+                                            <button type="button" class="btn btn-sm btn-outline-danger w-100 remove-skill">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 {% endfor %}
                             </div>
-                            <button type="button" class="btn btn-sm btn-outline-primary" id="addSkillBtn">
-                                <i class="bi bi-plus"></i> Add Skill
-                            </button>
+                            <div class="text-center mt-3">
+                                <button type="button" class="btn btn-sm btn-outline-primary" id="addSkillBtn">
+                                    <i class="bi bi-plus"></i> Add Another Skill
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Education Section -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#educationSection">
-                            <i class="bi bi-mortarboard me-2"></i> Education
-                        </button>
-                    </h2>
-                    <div id="educationSection" class="accordion-collapse collapse">
-                        <div class="accordion-body">
+                <div class="tab-pane fade" id="education" role="tabpanel">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-mortarboard me-2"></i> Education</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="addEducationBtn">
+                                <i class="bi bi-plus"></i> Add Education
+                            </button>
+                        </div>
+                        <div class="card-body">
                             <div id="educationContainer">
                                 {% for education in resume.educations.all %}
                                 <div class="education-item mb-4 p-3 border rounded">
                                     <input type="hidden" name="education_ids[]" value="{{ education.id }}">
                                     <div class="mb-3">
-                                        <label class="form-label">Institution</label>
-                                        <input type="text" class="form-control" name="education_institutions[]" value="{{ education.institution }}">
+                                        <label class="form-label">Institution*</label>
+                                        <input type="text" class="form-control" name="education_institutions[]" value="{{ education.institution }}" required>
                                     </div>
-                                    <div class="row">
+                                    
+                                    <div class="row g-2">
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Degree</label>
-                                            <input type="text" class="form-control" name="education_degrees[]" value="{{ education.degree }}">
+                                            <label class="form-label">Degree*</label>
+                                            <select class="form-select" name="education_degrees[]" required>
+                                                {% for value, display in DEGREE_CHOICES %}
+                                                    <option value="{{ value }}" {% if education.degree == value %}selected{% endif %}>{{ display }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Field of Study</label>
-                                            <input type="text" class="form-control" name="education_fields[]" value="{{ education.field_of_study }}">
+                                            <label class="form-label">Field of Study*</label>
+                                            <input type="text" class="form-control" name="education_fields[]" value="{{ education.field_of_study }}" required>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    
+                                    <div class="row g-2">
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Start Year</label>
-                                            <input type="month" class="form-control" name="education_start_years[]" value="{{ education.start_year }}">
+                                            <label class="form-label">Start Year*</label>
+                                            <input type="month" class="form-control" name="education_start_years[]" value="{{ education.start_year|date:'Y-m' }}" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">End Year</label>
-                                            <input type="month" class="form-control" name="education_end_years[]" value="{{ education.end_year }}">
+                                            <input type="month" class="form-control" name="education_end_years[]" value="{{ education.end_year|date:'Y-m' }}" {% if education.currently_studying %}disabled{% endif %}>
                                             <div class="form-check mt-2">
                                                 <input class="form-check-input" type="checkbox" name="education_current[]" {% if education.currently_studying %}checked{% endif %}>
-                                                <label class="form-check-label">Currently studying</label>
+                                                <label class="form-check-label">Currently studying here</label>
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <div class="row g-2">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">GPA</label>
+                                            <input type="number" step="0.01" min="0" max="4" class="form-control" name="education_gpas[]" value="{{ education.gpa }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Percentage</label>
+                                            <input type="number" step="0.01" min="0" max="100" class="form-control" name="education_percentages[]" value="{{ education.percentage }}">
+                                        </div>
+                                    </div>
+                                    
                                     <div class="mb-3">
                                         <label class="form-label">Description</label>
                                         <textarea class="form-control" name="education_descriptions[]" rows="3">{{ education.description }}</textarea>
                                     </div>
-                                    <button type="button" class="btn btn-sm btn-outline-danger remove-education"><i class="bi bi-trash"></i> Remove</button>
+                                    
+                                    <div class="text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-danger remove-education">
+                                            <i class="bi bi-trash"></i> Remove
+                                        </button>
+                                    </div>
                                 </div>
                                 {% endfor %}
                             </div>
-                            <button type="button" class="btn btn-sm btn-outline-primary" id="addEducationBtn">
-                                <i class="bi bi-plus"></i> Add Education
-                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Add other sections (Experience, Projects, etc.) following same pattern -->
-                
-                <div class="sidebar-footer mt-3">
-                    <button type="submit" class="btn btn-primary me-2">
-                        <i class="bi bi-save"></i> Save Resume
-                    </button>
-                    {% comment %} <a href="{% url 'generate_pdf' resume.id %}" class="btn btn-success me-2"> {% endcomment %}
-                    {% if not creating_new %}
-                        <a href="{% url 'resumes:download_resume' resume.id %}" class="btn btn-success me-2">
-                            <i class="bi bi-download"></i> Download PDF
-                        </a>
-                    {% else %}
-                        <button class="btn btn-secondary me-2" disabled title="Save the resume first">
-                            <i class="bi bi-download"></i> Download PDF
-                        </button>
-                    {% endif %}
+                <!-- Experience Section -->
+                <div class="tab-pane fade" id="experience" role="tabpanel">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-briefcase me-2"></i> Work Experience</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="addExperienceBtn">
+                                <i class="bi bi-plus"></i> Add Experience
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="experienceContainer">
+                                {% for experience in resume.experiences.all %}
+                                <div class="experience-item mb-4 p-3 border rounded">
+                                    <input type="hidden" name="experience_ids[]" value="{{ experience.id }}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Organization*</label>
+                                        <input type="text" class="form-control" name="experience_organizations[]" value="{{ experience.organization }}" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Position*</label>
+                                        <input type="text" class="form-control" name="experience_positions[]" value="{{ experience.position }}" required>
+                                    </div>
+                                    
+                                    <div class="row g-2">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Start Date*</label>
+                                            <input type="date" class="form-control" name="experience_start_dates[]" value="{{ experience.start_date|date:'Y-m-d' }}" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">End Date</label>
+                                            <input type="date" class="form-control" name="experience_end_dates[]" value="{{ experience.end_date|date:'Y-m-d' }}" {% if experience.currently_working %}disabled{% endif %}>
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" name="experience_current[]" {% if experience.currently_working %}checked{% endif %}>
+                                                <label class="form-check-label">Currently working here</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" name="experience_descriptions[]" rows="3">{{ experience.description }}</textarea>
+                                    </div>
+                                    
+                                    <div class="responsibilities-container mb-3">
+                                        <label class="form-label">Key Responsibilities</label>
+                                        {% for responsibility in experience.responsibilities.all %}
+                                        <div class="responsibility-item input-group mb-2">
+                                            <input type="hidden" name="responsibility_ids[]" value="{{ responsibility.id }}">
+                                            <input type="text" class="form-control" name="responsibility_descriptions[]" value="{{ responsibility.description }}">
+                                            <button type="button" class="btn btn-outline-danger remove-responsibility">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                        {% endfor %}
+                                        <button type="button" class="btn btn-sm btn-outline-primary add-responsibility">
+                                            <i class="bi bi-plus"></i> Add Responsibility
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-danger remove-experience">
+                                            <i class="bi bi-trash"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Section -->
+                <div class="tab-pane fade" id="projects" role="tabpanel">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-kanban me-2"></i> Projects</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="addProjectBtn">
+                                <i class="bi bi-plus"></i> Add Project
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="projectsContainer">
+                                {% for project in resume.projects.all %}
+                                <div class="project-item mb-4 p-3 border rounded">
+                                    <input type="hidden" name="project_ids[]" value="{{ project.id }}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Project Title*</label>
+                                        <input type="text" class="form-control" name="project_titles[]" value="{{ project.title }}" required>
+                                    </div>
+                                    
+                                    <div class="row g-2">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="date" class="form-control" name="project_start_dates[]" value="{{ project.start_date|date:'Y-m-d' }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">End Date</label>
+                                            <input type="date" class="form-control" name="project_end_dates[]" value="{{ project.end_date|date:'Y-m-d' }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Project URL</label>
+                                        <input type="url" class="form-control" name="project_urls[]" value="{{ project.project_url }}">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Description*</label>
+                                        <textarea class="form-control" name="project_descriptions[]" rows="3" required>{{ project.description }}</textarea>
+                                    </div>
+                                    
+                                    <div class="text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-danger remove-project">
+                                            <i class="bi bi-trash"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificates Section -->
+                <div class="tab-pane fade" id="certificates" role="tabpanel">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-award me-2"></i> Certifications</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="addCertificateBtn">
+                                <i class="bi bi-plus"></i> Add Certificate
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="certificatesContainer">
+                                {% for certificate in resume.certificates.all %}
+                                <div class="certificate-item mb-4 p-3 border rounded">
+                                    <input type="hidden" name="certificate_ids[]" value="{{ certificate.id }}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Certificate Title*</label>
+                                        <input type="text" class="form-control" name="certificate_titles[]" value="{{ certificate.title }}" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Issuing Organization*</label>
+                                        <input type="text" class="form-control" name="certificate_organizations[]" value="{{ certificate.issuing_organization }}" required>
+                                    </div>
+                                    
+                                    <div class="row g-2">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Issue Date</label>
+                                            <input type="date" class="form-control" name="certificate_issue_dates[]" value="{{ certificate.issue_date|date:'Y-m-d' }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Expiration Date</label>
+                                            <input type="date" class="form-control" name="certificate_expiration_dates[]" value="{{ certificate.expiration_date|date:'Y-m-d' }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row g-2">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Credential ID</label>
+                                            <input type="text" class="form-control" name="certificate_ids[]" value="{{ certificate.credential_id }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Credential URL</label>
+                                            <input type="url" class="form-control" name="certificate_urls[]" value="{{ certificate.credential_url }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" name="certificate_descriptions[]" rows="3">{{ certificate.description }}</textarea>
+                                    </div>
+                                    
+                                    <div class="text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-danger remove-certificate">
+                                            <i class="bi bi-trash"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements Section -->
+                <div class="tab-pane fade" id="achievements" role="tabpanel">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-trophy me-2"></i> Achievements</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="addAchievementBtn">
+                                <i class="bi bi-plus"></i> Add Achievement
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="achievementsContainer">
+                                {% for achievement in resume.achievements.all %}
+                                <div class="achievement-item mb-4 p-3 border rounded">
+                                    <input type="hidden" name="achievement_ids[]" value="{{ achievement.id }}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Title*</label>
+                                        <input type="text" class="form-control" name="achievement_titles[]" value="{{ achievement.title }}" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Date</label>
+                                        <input type="date" class="form-control" name="achievement_dates[]" value="{{ achievement.date|date:'Y-m-d' }}">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" name="achievement_descriptions[]" rows="3">{{ achievement.description }}</textarea>
+                                    </div>
+                                    
+                                    <div class="text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-danger remove-achievement">
+                                            <i class="bi bi-trash"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Links Section -->
+                <div class="tab-pane fade" id="social" role="tabpanel">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-link-45deg me-2"></i> Social Links</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="addSocialLinkBtn">
+                                <i class="bi bi-plus"></i> Add Link
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="socialLinksContainer">
+                                {% for link in resume.social_links.all %}
+                                <div class="social-link-item mb-3 p-3 border rounded">
+                                    <input type="hidden" name="social_link_ids[]" value="{{ link.id }}">
+                                    <div class="row g-2">
+                                        <div class="col-md-5">
+                                            <label class="form-label">Platform*</label>
+                                            <input type="text" class="form-control" name="social_platforms[]" value="{{ link.platform }}" required>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label">URL*</label>
+                                            <input type="url" class="form-control" name="social_urls[]" value="{{ link.url }}" required>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-end">
+                                            <button type="button" class="btn btn-sm btn-outline-danger w-100 remove-social-link">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions sticky-bottom bg-white p-3 border-top">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-save"></i> Save Resume
+                            </button>
+                            <button type="reset" class="btn btn-outline-secondary me-2">
+                                <i class="bi bi-arrow-counterclockwise"></i> Reset
+                            </button>
+                        </div>
+                        <div>
+                            {% if not creating_new %}
+                                <a href="{% url 'resumes:download_resume' resume.id %}" class="btn btn-success">
+                                    <i class="bi bi-download"></i> Download PDF
+                                </a>
+                            {% else %}
+                                <button class="btn btn-secondary" disabled title="Save the resume first">
+                                    <i class="bi bi-download"></i> Download PDF
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
 
         <!-- Right Side - Resume Preview -->
         <div class="col-lg-8 col-md-7 resume-preview">
-            <div class="resume-paper" id="resumePreview">
+            <div class="preview-header d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0"><i class="bi bi-eye me-2"></i> Resume Preview</h3>
+                <div class="template-selector">
+                    <select class="form-select form-select-sm" id="templateSelector">
+                        {% for value, display in TEMPLATE_CHOICES %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="resume-paper shadow-lg" id="resumePreview">
                 <!-- Preview will be updated by JavaScript -->
             </div>
         </div>
@@ -183,5 +561,5 @@
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{% static 'resumes/create_resume.js' %}"></script>
+<script src="{% static 'resumes/create_resume.js' %}?v=2.0"></script>
 {% endblock %}
