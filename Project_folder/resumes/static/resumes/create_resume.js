@@ -1,3 +1,18 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('resumeForm');
     const previewContainer = document.getElementById('resumePreview');
@@ -5,164 +20,174 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize form
     function initializeForm() {
-        if (isNewResume) {
-            // New resume specific setup
-            document.querySelectorAll('.remove-skill, .remove-education').forEach(btn => {
-                btn.style.display = 'none';
-            });
-        } else {
-            // Existing resume setup
-            setupDynamicSections();
-            updatePreview();
-        }
+        setupDynamicSections();
+        setupInputListeners();
+        updatePreview();
     }
 
     // Setup dynamic sections
     function setupDynamicSections() {
         // Skills
-        document.getElementById('addSkillBtn').addEventListener('click', addSkill);
+        document.getElementById('addSkillBtn')?.addEventListener('click', addNewSkill);
         
         // Education
-        document.getElementById('addEducationBtn').addEventListener('click', addEducation);
+        document.getElementById('addEducationBtn')?.addEventListener('click', addNewEducation);
         
-        // Remove handlers
+        // Experience
+        document.getElementById('addExperienceBtn')?.addEventListener('click', addNewExperience);
+        
+        // Projects
+        document.getElementById('addProjectBtn')?.addEventListener('click', addNewProject);
+        
+        // Certificates
+        document.getElementById('addCertificateBtn')?.addEventListener('click', addNewCertificate);
+        
+        // Achievements
+        document.getElementById('addAchievementBtn')?.addEventListener('click', addNewAchievement);
+        
+        // Social Links
+        document.getElementById('addSocialLinkBtn')?.addEventListener('click', addNewSocialLink);
+        
+        // Delegated event listeners for remove buttons
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-skill')) {
-                e.target.closest('.skill-item').remove();
-                updatePreview();
+            if (e.target.closest('.remove-skill')) {
+                removeItem(e.target.closest('.skill-item'));
             }
-            if (e.target.classList.contains('remove-education')) {
-                e.target.closest('.education-item').remove();
-                updatePreview();
+            if (e.target.closest('.remove-education')) {
+                removeItem(e.target.closest('.education-item'));
+            }
+            if (e.target.closest('.remove-experience')) {
+                removeItem(e.target.closest('.experience-item'));
+            }
+            if (e.target.closest('.remove-project')) {
+                removeItem(e.target.closest('.project-item'));
+            }
+            if (e.target.closest('.remove-certificate')) {
+                removeItem(e.target.closest('.certificate-item'));
+            }
+            if (e.target.closest('.remove-achievement')) {
+                removeItem(e.target.closest('.achievement-item'));
+            }
+            if (e.target.closest('.remove-social-link')) {
+                removeItem(e.target.closest('.social-link-item'));
+            }
+            if (e.target.closest('.remove-responsibility')) {
+                removeItem(e.target.closest('.responsibility-item'));
             }
         });
-    }
-
-    // Add new skill
-    function addSkill() {
-        const container = document.getElementById('skillsContainer');
-        const newSkill = document.createElement('div');
-        newSkill.className = 'skill-item mb-3';
-        newSkill.innerHTML = `
-            <div class="d-flex align-items-center">
-                <input type="text" class="form-control me-2 skill-input" name="skill_names[]" placeholder="Skill name">
-                <select class="form-select skill-level" name="skill_levels[]" style="width: 120px;">
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
-                    <option value="expert">Expert</option>
-                </select>
-                <button type="button" class="btn btn-sm btn-outline-danger ms-2 remove-skill">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </div>
-        `;
-        container.appendChild(newSkill);
-        setupInputListeners(newSkill);
-    }
-
-    // Add new education
-    function addEducation() {
-        const container = document.getElementById('educationContainer');
-        const newEducation = document.createElement('div');
-        newEducation.className = 'education-item mb-4 p-3 border rounded';
-        newEducation.innerHTML = `
-            <div class="mb-3">
-                <label class="form-label">Institution</label>
-                <input type="text" class="form-control" name="education_institutions[]" placeholder="University Name">
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Degree</label>
-                    <input type="text" class="form-control" name="education_degrees[]" placeholder="B.Tech/BE">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Field of Study</label>
-                    <input type="text" class="form-control" name="education_fields[]" placeholder="Computer Science">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Start Year</label>
-                    <input type="month" class="form-control" name="education_start_years[]">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">End Year</label>
-                    <input type="month" class="form-control" name="education_end_years[]">
-                    <div class="form-check mt-2">
-                        <input class="form-check-input" type="checkbox" name="education_current[]">
-                        <label class="form-check-label">Currently studying</label>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" name="education_descriptions[]" rows="3"></textarea>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-danger remove-education">
-                <i class="bi bi-trash"></i> Remove
-            </button>
-        `;
-        container.appendChild(newEducation);
-        setupInputListeners(newEducation);
     }
 
     // Setup input listeners for real-time updates
-    function setupInputListeners(element) {
-        element.querySelectorAll('input, textarea, select').forEach(input => {
+    function setupInputListeners() {
+        // Listen to all existing inputs
+        document.querySelectorAll('input, textarea, select').forEach(input => {
             input.addEventListener('input', debounce(updatePreview, 500));
             input.addEventListener('change', debounce(updatePreview, 500));
         });
+        
+        // Avatar preview
+        const avatarInput = document.getElementById('avatarInput');
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        updatePreview();
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // Summary character counter
+        const summaryTextarea = document.querySelector('textarea[name="summary"]');
+        if (summaryTextarea) {
+            summaryTextarea.addEventListener('input', debounce(updatePreview, 500));
+        }
     }
 
-    // Update preview
+    // Helper function to remove items with animation
+    function removeItem(item) {
+        if (item) {
+            item.classList.add('removing');
+            setTimeout(() => {
+                item.remove();
+                updatePreview();
+            }, 300);
+        }
+    }
+
+    // Update preview function
     function updatePreview() {
-        const formData = new FormData(form);
-        
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.preview_html) {
-                previewContainer.innerHTML = data.preview_html;
+    const formData = new FormData(form);
+    
+    // Manually add all sections to the FormData
+    const sections = [
+        'skill_names[]', 'skill_categories[]',
+        'education_institutions[]', 'education_degrees[]', 'education_fields[]',
+        'education_start_years[]', 'education_end_years[]', 'education_current[]',
+        'experience_organizations[]', 'experience_positions[]', 'experience_start_dates[]',
+        'experience_end_dates[]', 'experience_current[]', 'responsibility_descriptions[]',
+        'project_titles[]', 'project_start_dates[]', 'project_end_dates[]',
+        'certificate_titles[]', 'certificate_organizations[]', 'certificate_issue_dates[]',
+        'achievement_titles[]', 'achievement_dates[]',
+        'social_platforms[]', 'social_urls[]'
+    ];
+    
+    sections.forEach(field => {
+        document.querySelectorAll(`[name="${field}"]`).forEach(input => {
+            if (!formData.has(field)) {
+                if (input.type === 'checkbox') {
+                    formData.append(field, input.checked);
+                } else {
+                    formData.append(field, input.value);
+                }
             }
         });
-    }
-
-    // Form submission
-    form.addEventListener('submit', function(e) {
-        if (isNewResume) return; // Let default submission handle new resumes
-        
-        e.preventDefault();
-        submitResumeForm(form);
     });
+    
+    // Get the selected template
+    const templateSelector = document.getElementById('templateSelector');
+    const selectedTemplate = templateSelector ? templateSelector.value : 'temp_1';
+    formData.append('template', selectedTemplate);
+    
+    fetch('/resumes/preview/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        if (data.preview_html) {
+            previewContainer.innerHTML = data.preview_html;
+        }
+    })
+    .catch(error => {
+        console.error('Error updating preview:', error);
+    });
+}
 
-    function submitResumeForm(form) {
-        const formData = new FormData(form);
-        
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+    // Helper function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert('Resume saved successfully!');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to save resume');
-        });
+        }
+        return cookieValue;
     }
 
     // Debounce function for performance
@@ -177,80 +202,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the form
     initializeForm();
     
-    // Setup listeners for existing inputs
-    document.querySelectorAll('input, textarea, select').forEach(input => {
-        input.addEventListener('input', debounce(updatePreview, 500));
-        input.addEventListener('change', debounce(updatePreview, 500));
-    });
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// complete file functionlity
-document.addEventListener('DOMContentLoaded', function() {
-    // Avatar preview functionality
-    const avatarInput = document.getElementById('avatarInput');
-    const avatarPreview = document.getElementById('avatarPreview');
-    const avatarPreviewContainer = document.getElementById('avatarPreviewContainer');
-    const currentAvatar = document.getElementById('currentAvatar');
-    
-    if (avatarInput) {
-        avatarInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    avatarPreview.src = event.target.result;
-                    avatarPreviewContainer.style.display = 'block';
-                    if (currentAvatar) {
-                        currentAvatar.style.display = 'none';
-                    }
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-    
-    // Summary character counter
-    const summaryTextarea = document.querySelector('textarea[name="summary"]');
-    const summaryCounter = document.getElementById('summaryCounter');
-    
-    if (summaryTextarea && summaryCounter) {
-        // Initialize counter
-        summaryCounter.textContent = summaryTextarea.value.length;
-        
-        // Update counter on input
-        summaryTextarea.addEventListener('input', function() {
-            const currentLength = this.value.length;
-            summaryCounter.textContent = currentLength;
-            
-            // Optional: Add warning when approaching limit
-            if (currentLength > 280) {
-                summaryCounter.style.color = '#dc3545';
-            } else {
-                summaryCounter.style.color = 'inherit';
-            }
-            
-            // Enforce max length (optional)
-            if (currentLength > 300) {
-                this.value = this.value.substring(0, 300);
-                summaryCounter.textContent = 300;
-            }
-        });
+    // Template selector change listener
+    const templateSelector = document.getElementById('templateSelector');
+    if (templateSelector) {
+        templateSelector.addEventListener('change', updatePreview);
     }
 });
 
+// Section-specific functions (addNewSkill, addNewEducation, etc.) would go here
+// These should all call updatePreview() after adding new elements
 
 
 
@@ -321,7 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 100);
         });
     });
-});
 
 
 
@@ -345,7 +304,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Skills Section 
-document.addEventListener('DOMContentLoaded', function() {
     // Skills Section Functionality
     const skillsContainer = document.getElementById('skillsContainer');
     const addSkillBtn = document.getElementById('addSkillBtn');
@@ -447,7 +405,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initial update
     updateSkillBadges();
-});
 
 
 
@@ -468,7 +425,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Education Section Functionality
-document.addEventListener('DOMContentLoaded', function() {
     const educationContainer = document.getElementById('educationContainer');
     const addEducationBtn = document.getElementById('addEducationBtn');
     
@@ -619,7 +575,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initial update
     updateDegreeBadges();
-});
 
 
 
@@ -643,7 +598,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Experience Section Functionality
-document.addEventListener('DOMContentLoaded', function() {
     const experienceContainer = document.getElementById('experienceContainer');
     const addExperienceBtn = document.getElementById('addExperienceBtn');
     
@@ -834,7 +788,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 50);
         });
     });
-});
 
 
 
@@ -856,7 +809,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Projects Section Functionality
-document.addEventListener('DOMContentLoaded', function() {
     const projectsContainer = document.getElementById('projectsContainer');
     const addProjectBtn = document.getElementById('addProjectBtn');
     
@@ -981,4 +933,782 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initial update
     updateProjectStatusBadges();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Certificates Section Functionality
+    const certificatesContainer = document.getElementById('certificatesContainer');
+    const addCertificateBtn = document.getElementById('addCertificateBtn');
+    
+    // Add new certificate entry
+    function addNewCertificate() {
+        const certificateId = Date.now(); // Temporary ID
+        
+        const certificateItem = document.createElement('div');
+        certificateItem.className = 'certificate-item mb-4 p-3 border rounded';
+        certificateItem.innerHTML = `
+            <input type="hidden" name="certificate_ids[]" value="new-${certificateId}">
+            <div class="mb-3">
+                <label class="form-label">Certificate Title*</label>
+                <input type="text" class="form-control" name="certificate_titles[]" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Issuing Organization*</label>
+                <input type="text" class="form-control" name="certificate_organizations[]" required>
+            </div>
+            
+            <div class="row g-2">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Issue Date</label>
+                    <input type="date" class="form-control" name="certificate_issue_dates[]">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Expiration Date</label>
+                    <input type="date" class="form-control" name="certificate_expiration_dates[]">
+                </div>
+            </div>
+            
+            <div class="row g-2">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Credential ID</label>
+                    <input type="text" class="form-control" name="certificate_ids[]" placeholder="e.g., ABC123456">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Credential URL</label>
+                    <input type="url" class="form-control" name="certificate_urls[]" placeholder="https://example.com/certificate">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" name="certificate_descriptions[]" rows="3"></textarea>
+            </div>
+            
+            <div class="text-end">
+                <button type="button" class="btn btn-sm btn-outline-danger remove-certificate">
+                    <i class="bi bi-trash"></i> Remove
+                </button>
+            </div>
+        `;
+        
+        certificatesContainer.appendChild(certificateItem);
+        
+        // Add date change listeners for status updates
+        const issueDateInput = certificateItem.querySelector('input[name="certificate_issue_dates[]"]');
+        const expiryDateInput = certificateItem.querySelector('input[name="certificate_expiration_dates[]"]');
+        
+        function updateCertificateStatus() {
+            // This can be used to update visual indicators in the resume preview
+            // You would implement this based on your preview rendering logic
+        }
+        
+        if (issueDateInput) issueDateInput.addEventListener('change', updateCertificateStatus);
+        if (expiryDateInput) expiryDateInput.addEventListener('change', updateCertificateStatus);
+        
+        // Scroll to and focus on the new item
+        setTimeout(() => {
+            certificateItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            certificateItem.querySelector('input[name="certificate_titles[]"]').focus();
+        }, 100);
+    }
+    
+    // Handle add certificate button click
+    if (addCertificateBtn) {
+        addCertificateBtn.addEventListener('click', addNewCertificate);
+    }
+    
+    // Handle remove certificate button clicks (delegated event)
+    certificatesContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-certificate')) {
+            const certificateItem = e.target.closest('.certificate-item');
+            if (certificateItem) {
+                certificateItem.classList.add('removing');
+                setTimeout(() => certificateItem.remove(), 300);
+            }
+        }
+    });
+    
+    // Initialize date change listeners for existing certificates
+    document.querySelectorAll('.certificate-item').forEach(certificate => {
+        const issueDateInput = certificate.querySelector('input[name="certificate_issue_dates[]"]');
+        const expiryDateInput = certificate.querySelector('input[name="certificate_expiration_dates[]"]');
+        
+        function updateCertificateStatus() {
+            // Update visual indicators in resume preview
+        }
+        
+        if (issueDateInput) issueDateInput.addEventListener('change', updateCertificateStatus);
+        if (expiryDateInput) expiryDateInput.addEventListener('change', updateCertificateStatus);
+    });
+    
+    // Function to update certificate status badges in preview
+    function updateCertificateStatusBadges() {
+        document.querySelectorAll('.certificate-status').forEach(badge => {
+            const issueDate = badge.dataset.issueDate;
+            const expiryDate = badge.dataset.expiryDate;
+            
+            if (!expiryDate) {
+                badge.className = 'certificate-status certificate-status-no-expiry';
+                badge.textContent = 'No Expiry';
+            } else {
+                const today = new Date();
+                const expiry = new Date(expiryDate);
+                
+                if (expiry > today) {
+                    badge.className = 'certificate-status certificate-status-active';
+                    badge.textContent = 'Active';
+                } else {
+                    badge.className = 'certificate-status certificate-status-expired';
+                    badge.textContent = 'Expired';
+                }
+            }
+        });
+    }
+    
+    // Update when dates change
+    certificatesContainer.addEventListener('change', function(e) {
+        if (e.target.name === 'certificate_issue_dates[]' || e.target.name === 'certificate_expiration_dates[]') {
+            updateCertificateStatusBadges();
+        }
+    });
+    
+    // Initial update
+    updateCertificateStatusBadges();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Achievements Section Functionality
+    const achievementsContainer = document.getElementById('achievementsContainer');
+    const addAchievementBtn = document.getElementById('addAchievementBtn');
+    
+    // Add new achievement entry
+    function addNewAchievement() {
+        const achievementId = Date.now(); // Temporary ID
+        
+        const achievementItem = document.createElement('div');
+        achievementItem.className = 'achievement-item mb-4 p-3 border rounded';
+        achievementItem.innerHTML = `
+            <input type="hidden" name="achievement_ids[]" value="new-${achievementId}">
+            <div class="mb-3">
+                <label class="form-label">Title*</label>
+                <input type="text" class="form-control" name="achievement_titles[]" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" name="achievement_dates[]">
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" name="achievement_descriptions[]" rows="3"></textarea>
+            </div>
+            
+            <div class="text-end">
+                <button type="button" class="btn btn-sm btn-outline-danger remove-achievement">
+                    <i class="bi bi-trash"></i> Remove
+                </button>
+            </div>
+        `;
+        
+        achievementsContainer.appendChild(achievementItem);
+        
+        // Scroll to and focus on the new item
+        setTimeout(() => {
+            achievementItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            achievementItem.querySelector('input[name="achievement_titles[]"]').focus();
+        }, 100);
+    }
+    
+    // Handle add achievement button click
+    if (addAchievementBtn) {
+        addAchievementBtn.addEventListener('click', addNewAchievement);
+    }
+    
+    // Handle remove achievement button clicks (delegated event)
+    achievementsContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-achievement')) {
+            const achievementItem = e.target.closest('.achievement-item');
+            if (achievementItem) {
+                achievementItem.classList.add('removing');
+                setTimeout(() => achievementItem.remove(), 300);
+            }
+        }
+    });
+    
+    // Function to update achievement dates in preview
+    function updateAchievementDates() {
+        document.querySelectorAll('.achievement-date').forEach(dateElement => {
+            const dateValue = dateElement.dataset.date;
+            if (dateValue) {
+                const date = new Date(dateValue);
+                dateElement.textContent = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+        });
+    }
+    
+    // Update when dates change
+    achievementsContainer.addEventListener('change', function(e) {
+        if (e.target.name === 'achievement_dates[]') {
+            updateAchievementDates();
+        }
+    });
+    
+    // Initial update
+    updateAchievementDates();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Social Links Section Functionality
+    const socialLinksContainer = document.getElementById('socialLinksContainer');
+    const addSocialLinkBtn = document.getElementById('addSocialLinkBtn');
+    
+    // Common social platforms with icons
+    const socialPlatforms = {
+        'linkedin': { name: 'LinkedIn', icon: 'bi-linkedin' },
+        'github': { name: 'GitHub', icon: 'bi-github' },
+        'twitter': { name: 'Twitter', icon: 'bi-twitter' },
+        'facebook': { name: 'Facebook', icon: 'bi-facebook' },
+        'instagram': { name: 'Instagram', icon: 'bi-instagram' },
+        'youtube': { name: 'YouTube', icon: 'bi-youtube' },
+        'website': { name: 'Website', icon: 'bi-globe' },
+        'other': { name: 'Other', icon: 'bi-link-45deg' }
+    };
+
+    // Add new social link
+    function addNewSocialLink(platform = '', url = '') {
+        const linkId = Date.now(); // Temporary ID
+        
+        const linkItem = document.createElement('div');
+        linkItem.className = 'social-link-item mb-3 p-3 border rounded';
+        linkItem.innerHTML = `
+            <input type="hidden" name="social_link_ids[]" value="new-${linkId}">
+            <div class="row g-2">
+                <div class="col-md-5">
+                    <label class="form-label">Platform*</label>
+                    <select class="form-select" name="social_platforms[]" required>
+                        <option value="" disabled selected>Select platform</option>
+                        ${Object.entries(socialPlatforms).map(([key, platform]) => 
+                            `<option value="${key}" ${platform === key ? 'selected' : ''}>
+                                ${platform.name}
+                            </option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">URL*</label>
+                    <input type="url" class="form-control" name="social_urls[]" value="${url}" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-sm btn-outline-danger w-100 remove-social-link">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        socialLinksContainer.appendChild(linkItem);
+        
+        // Add platform change listener
+        const platformSelect = linkItem.querySelector('select[name="social_platforms[]"]');
+        const urlInput = linkItem.querySelector('input[name="social_urls[]"]');
+        
+        platformSelect.addEventListener('change', function() {
+            const selectedPlatform = this.value;
+            if (selectedPlatform && !urlInput.value) {
+                // Suggest URL format based on platform
+                const urlHints = {
+                    'linkedin': 'https://linkedin.com/in/yourprofile',
+                    'github': 'https://github.com/yourusername',
+                    'twitter': 'https://twitter.com/yourhandle',
+                    'facebook': 'https://facebook.com/yourprofile',
+                    'instagram': 'https://instagram.com/yourhandle',
+                    'youtube': 'https://youtube.com/yourchannel',
+                    'website': 'https://yourwebsite.com'
+                };
+                
+                if (urlHints[selectedPlatform]) {
+                    urlInput.placeholder = urlHints[selectedPlatform];
+                }
+            }
+            updatePlatformIcons();
+        });
+        
+        // Scroll to and focus on the new item
+        setTimeout(() => {
+            linkItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            platformSelect.focus();
+        }, 100);
+    }
+    
+
+
+
+
+
+
+
+
+    // Handle add social link button click
+    if (addSocialLinkBtn) {
+        addSocialLinkBtn.addEventListener('click', function() {
+            addNewSocialLink();
+        });
+    }
+    
+
+
+
+
+
+
+
+    // Handle remove social link button clicks (delegated event)
+    socialLinksContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-social-link')) {
+            const linkItem = e.target.closest('.social-link-item');
+            if (linkItem) {
+                linkItem.classList.add('removing');
+                setTimeout(() => linkItem.remove(), 300);
+            }
+        }
+    });
+    
+
+
+
+
+
+
+    // Update platform icons in preview
+    function updatePlatformIcons() {
+        document.querySelectorAll('.social-platform').forEach(platformElement => {
+            const platform = platformElement.dataset.platform;
+            if (platform && socialPlatforms[platform]) {
+                platformElement.innerHTML = `
+                    <i class="bi ${socialPlatforms[platform].icon}"></i>
+                    ${socialPlatforms[platform].name}
+                `;
+            }
+        });
+    }
+    
+
+
+
+
+
+
+    // Update when platforms change
+    socialLinksContainer.addEventListener('change', function(e) {
+        if (e.target.name === 'social_platforms[]') {
+            updatePlatformIcons();
+        }
+    });
+    
+
+
+
+
+
+
+
+    // Initialize existing social links
+    document.querySelectorAll('input[name="social_platforms[]"]').forEach(input => {
+        input.insertAdjacentHTML('beforebegin', `
+            <div class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="bi ${socialPlatforms[input.value]?.icon || 'bi-link-45deg'}"></i>
+                </span>
+            </div>
+        `);
+    });
+    
+
+
+
+
+    // Initial update
+    updatePlatformIcons();
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Resume Preview Scaling Functionality
+    const resumePreview = document.getElementById('resumePreview');
+    let currentScale = 1;
+    const minScale = 0.7;
+    const maxScale = 1;
+    
+    // Create scaling controls
+    const scaleControls = document.createElement('div');
+    scaleControls.className = 'scale-controls';
+    scaleControls.innerHTML = `
+        <button id="zoomOutBtn" title="Zoom Out">-</button>
+        <span id="scaleValue">100%</span>
+        <button id="zoomInBtn" title="Zoom In">+</button>
+    `;
+    resumePreview.appendChild(scaleControls);
+    
+
+
+
+
+
+    // Create content container
+    const contentContainer = document.createElement('div');
+    contentContainer.className = 'resume-content';
+    resumePreview.insertBefore(contentContainer, resumePreview.firstChild);
+    
+
+
+
+
+
+
+    // Function to update preview content
+    // Update the updatePreview function to include all sections
+    function updatePreview() {
+        const formData = new FormData(form);
+        
+        // Get all form data including dynamically added sections
+        const formElements = form.elements;
+        for (let i = 0; i < formElements.length; i++) {
+            const element = formElements[i];
+            if (element.name && !formData.has(element.name)) {
+                if (element.type === 'checkbox') {
+                    formData.append(element.name, element.checked);
+                } else {
+                    formData.append(element.name, element.value);
+                }
+            }
+        }
+
+        // Get the selected template
+        const templateSelector = document.getElementById('templateSelector');
+        const selectedTemplate = templateSelector ? templateSelector.value : 'temp_1';
+        formData.append('template', selectedTemplate);
+        
+        fetch('/resumes/preview/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            if (data.preview_html) {
+                previewContainer.innerHTML = data.preview_html;
+            }
+        })
+        .catch(error => {
+            console.error('Error updating preview:', error);
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+    // Add event listeners for all dynamic sections
+    function setupDynamicSections() {
+        // Skills
+        document.getElementById('addSkillBtn')?.addEventListener('click', function() {
+            addNewSkill();
+            updatePreview();
+        });
+        
+        // Education
+        document.getElementById('addEducationBtn')?.addEventListener('click', function() {
+            addNewEducation();
+            updatePreview();
+        });
+        
+        // Experience
+        document.getElementById('addExperienceBtn')?.addEventListener('click', function() {
+            addNewExperience();
+            updatePreview();
+        });
+        
+        // Projects
+        document.getElementById('addProjectBtn')?.addEventListener('click', function() {
+            addNewProject();
+            updatePreview();
+        });
+        
+        // Certificates
+        document.getElementById('addCertificateBtn')?.addEventListener('click', function() {
+            addNewCertificate();
+            updatePreview();
+        });
+        
+        // Achievements
+        document.getElementById('addAchievementBtn')?.addEventListener('click', function() {
+            addNewAchievement();
+            updatePreview();
+        });
+        
+        // Social Links
+        document.getElementById('addSocialLinkBtn')?.addEventListener('click', function() {
+            addNewSocialLink();
+            updatePreview();
+        });
+        
+        // Delegated event listeners for remove buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-skill')) {
+                removeItem(e.target.closest('.skill-item'));
+                updatePreview();
+            }
+            if (e.target.closest('.remove-education')) {
+                removeItem(e.target.closest('.education-item'));
+                updatePreview();
+            }
+            if (e.target.closest('.remove-experience')) {
+                removeItem(e.target.closest('.experience-item'));
+                updatePreview();
+            }
+            if (e.target.closest('.remove-project')) {
+                removeItem(e.target.closest('.project-item'));
+                updatePreview();
+            }
+            if (e.target.closest('.remove-certificate')) {
+                removeItem(e.target.closest('.certificate-item'));
+                updatePreview();
+            }
+            if (e.target.closest('.remove-achievement')) {
+                removeItem(e.target.closest('.achievement-item'));
+                updatePreview();
+            }
+            if (e.target.closest('.remove-social-link')) {
+                removeItem(e.target.closest('.social-link-item'));
+                updatePreview();
+            }
+            if (e.target.closest('.remove-responsibility')) {
+                removeItem(e.target.closest('.responsibility-item'));
+                updatePreview();
+            }
+        });
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+    // Function to fit content to one page
+    function fitToSinglePage() {
+        const paperHeight = resumePreview.offsetHeight;
+        const contentHeight = contentContainer.scrollHeight;
+        
+        if (contentHeight > paperHeight) {
+            // Calculate required scale
+            const newScale = Math.min(maxScale, Math.max(minScale, paperHeight / contentHeight * 0.95));
+            currentScale = newScale;
+            contentContainer.style.transform = `scale(${newScale})`;
+            document.getElementById('scaleValue').textContent = `${Math.round(newScale * 100)}%`;
+            
+            // Enable compact mode if needed
+            if (newScale <= minScale * 1.1) {
+                resumePreview.classList.add('compact-mode');
+            } else {
+                resumePreview.classList.remove('compact-mode');
+            }
+        } else {
+            // Reset to full size if content fits
+            currentScale = 1;
+            contentContainer.style.transform = 'scale(1)';
+            document.getElementById('scaleValue').textContent = '100%';
+            resumePreview.classList.remove('compact-mode');
+        }
+    }
+    
+
+
+
+
+
+
+
+
+
+
+    // Zoom controls
+    document.getElementById('zoomOutBtn').addEventListener('click', function() {
+        currentScale = Math.max(minScale, currentScale - 0.05);
+        contentContainer.style.transform = `scale(${currentScale})`;
+        document.getElementById('scaleValue').textContent = `${Math.round(currentScale * 100)}%`;
+        fitToSinglePage();
+    });
+    document.getElementById('zoomInBtn').addEventListener('click', function() {
+        currentScale = Math.min(maxScale, currentScale + 0.05);
+        contentContainer.style.transform = `scale(${currentScale})`;
+        document.getElementById('scaleValue').textContent = `${Math.round(currentScale * 100)}%`;
+        fitToSinglePage();
+    });
+    
+
+
+
+
+
+
+    // Initial setup
+    updatePreviewContent();
+    
+    // Fit content initially and on changes
+    fitToSinglePage();
+    new ResizeObserver(fitToSinglePage).observe(contentContainer);
+    
+    // Also fit when window resizes
+    window.addEventListener('resize', fitToSinglePage);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('resumeForm');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Collect all form data including dynamically added fields
+        const formData = new FormData(form);
+        
+        // Manually add checkbox values since they might be missed
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            formData.append(checkbox.name, checkbox.checked);
+        });
+        
+        // Add all responsibility descriptions
+        document.querySelectorAll('input[name="responsibility_descriptions[]"]').forEach(input => {
+            if (!formData.has('responsibility_descriptions[]')) {
+                formData.append('responsibility_descriptions[]', input.value);
+            }
+        });
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.resume_id) {
+                    // Update form action for future edits
+                    form.action = `/resumes/edit/${data.resume_id}/`;
+                }
+                alert('Resume saved successfully!');
+            } else {
+                alert('Error saving resume: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while saving the resume');
+        });
+    });
 });
