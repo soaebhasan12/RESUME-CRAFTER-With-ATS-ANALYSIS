@@ -45,7 +45,6 @@
 
 .main-content {
     min-height: calc(100vh - 180px);
-    /* padding: 2rem 0; */
 }
 
 .footer {
@@ -55,7 +54,12 @@
     text-align: center;
 }
 
-/* Theme Toggle - Specific Component */
+
+
+
+
+
+/* Theme Toggle Specific Styles */
 .theme-toggle {
     position: fixed;
     bottom: 30px;
@@ -78,41 +82,33 @@
     transition: all 0.3s ease;
 }
 
-/* Ensure main content takes full available space */
-.main-content {
-    flex: 1;
-    min-height: calc(100vh - 400px); 
-                            /* Adjust based on header/footer height */
+#theme-switcher i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
-/* Container adjustments */
-.container.py-4 {
-    margin-bottom: 3rem;
-    position: relative;
+#theme-switcher:hover i {
+    transform: scale(1.1);
 }
 
-/* Footer positioning */
-.site-footer {
-    margin-top: auto;
+.fa-sun {
+    display: none; /* Initially hidden */
+    color: #ffd43b;
 }
 
-/* Add to base.css */
-.main-wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+.fa-moon {
+    color: #495057;
 }
 
-.main-content {
-    flex: 1;
-    min-height: calc(100vh - 400px); /* Adjust based on header/footer height */
-    background-color: var(--bg-color);
-    color: var(--text-color);
+/* Theme transition */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Responsive */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .theme-toggle {
         bottom: 20px;
