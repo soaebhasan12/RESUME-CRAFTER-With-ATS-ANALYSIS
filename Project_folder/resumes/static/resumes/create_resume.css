@@ -837,3 +837,443 @@ body {
 
 
 
+/* Certificates Section Styles */
+.certificate-item {
+    background-color: var(--form-bg);
+    border: 1px solid var(--section-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.certificate-item:hover {
+    box-shadow: 0 2px 12px rgba(var(--primary-accent-rgb), 0.1);
+    transform: translateY(-2px);
+}
+
+.certificate-item .form-control,
+.certificate-item .form-select {
+    background-color: var(--resume-bg);
+    border-color: var(--section-border);
+    color: var(--resume-text);
+}
+
+.certificate-item .form-label {
+    color: var(--sidebar-text);
+    font-weight: 500;
+}
+
+.certificate-item .btn-outline-danger {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.certificate-item .btn-outline-danger:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.certificate-item .credential-url {
+    color: var(--primary-accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.certificate-item .credential-url:hover {
+    color: var(--primary-accent);
+    text-decoration: underline;
+}
+
+/* Certificate status indicators */
+.certificate-status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.certificate-status-active {
+    background-color: rgba(var(--success-rgb), 0.1);
+    color: var(--success-color);
+}
+
+.certificate-status-expired {
+    background-color: rgba(var(--danger-rgb), 0.1);
+    color: var(--danger-color);
+}
+
+.certificate-status-no-expiry {
+    background-color: rgba(var(--info-rgb), 0.1);
+    color: var(--info-color);
+}
+
+/* Animations */
+@keyframes slideInCertificate {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.certificate-item {
+    animation: slideInCertificate 0.4s ease-out;
+}
+
+.certificate-item.removing {
+    animation: slideInCertificate 0.3s ease-out reverse;
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .certificate-item {
+        padding: 1rem;
+    }
+    
+    .certificate-item .row.g-2 {
+        gap: 1rem !important;
+    }
+    
+    .certificate-item .col-md-6 {
+        width: 100%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Achievements Section Styles */
+.achievement-item {
+    background-color: var(--form-bg);
+    border: 1px solid var(--section-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.achievement-item:hover {
+    box-shadow: 0 2px 12px rgba(var(--primary-accent-rgb), 0.1);
+    transform: translateY(-2px);
+}
+
+.achievement-item .form-control,
+.achievement-item .form-select {
+    background-color: var(--resume-bg);
+    border-color: var(--section-border);
+    color: var(--resume-text);
+}
+
+.achievement-item .form-label {
+    color: var(--sidebar-text);
+    font-weight: 500;
+}
+
+.achievement-item .btn-outline-danger {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.achievement-item .btn-outline-danger:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+/* Achievement type indicators */
+.achievement-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    background-color: rgba(var(--primary-accent-rgb), 0.1);
+    color: var(--primary-accent);
+}
+
+/* Animations */
+@keyframes slideInAchievement {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.achievement-item {
+    animation: slideInAchievement 0.4s ease-out;
+}
+
+.achievement-item.removing {
+    animation: slideInAchievement 0.3s ease-out reverse;
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .achievement-item {
+        padding: 1rem;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Social Links Section Styles */
+.social-link-item {
+    background-color: var(--form-bg);
+    border: 1px solid var(--section-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.social-link-item:hover {
+    box-shadow: 0 2px 8px rgba(var(--primary-accent-rgb), 0.1);
+}
+
+.social-link-item .form-control {
+    background-color: var(--resume-bg);
+    border-color: var(--section-border);
+    color: var(--resume-text);
+}
+
+.social-link-item .form-label {
+    color: var(--sidebar-text);
+    font-weight: 500;
+}
+
+.social-link-item .btn-outline-danger {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.social-link-item .btn-outline-danger:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+/* Platform icons */
+.platform-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    filter: var(--platform-icon-filter, none);
+}
+
+[data-theme="dark"] .platform-icon {
+    filter: brightness(0) invert(1);
+}
+
+/* Animations */
+@keyframes slideInSocial {
+    from { 
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.social-link-item {
+    animation: slideInSocial 0.3s ease-out;
+}
+
+.social-link-item.removing {
+    animation: slideInSocial 0.3s ease-out reverse;
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .social-link-item .col-md-5,
+    .social-link-item .col-md-2 {
+        width: 100%;
+    }
+    
+    .social-link-item .row.g-2 {
+        gap: 1rem !important;
+    }
+    
+    .social-link-item .d-flex.align-items-end {
+        justify-content: flex-end;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Resume Preview Container */
+.resume-paper {
+    background-color: var(--resume-bg);
+    color: var(--resume-text);
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    min-height: 80vh;
+    max-height: 1123px; /* Standard A4 height at 96dpi */
+    width: 794px; /* Standard A4 width at 96dpi */
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Content scaling container */
+.resume-content {
+    transform-origin: top left;
+    width: 100%;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+/* Sections scaling */
+.resume-section {
+    margin-bottom: 1rem;
+    page-break-inside: avoid;
+}
+
+/* Font size adjustments */
+.resume-paper h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+.resume-paper h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+.resume-paper p, .resume-paper li {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Compact layout */
+.compact-mode .resume-section {
+    margin-bottom: 0.5rem;
+}
+.compact-mode .resume-paper h1 {
+    font-size: 1.6rem;
+}
+.compact-mode .resume-paper h2 {
+    font-size: 1.2rem;
+}
+.compact-mode .resume-paper p, 
+.compact-mode .resume-paper li {
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+/* Scale controls */
+.scale-controls {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background: rgba(255,255,255,0.9);
+    padding: 0.5rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.scale-controls button {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.25rem;
+    cursor: pointer;
+}
+
+/* Print-specific styles */
+@media print {
+    .resume-paper {
+        box-shadow: none;
+        max-height: none;
+        width: auto;
+        padding: 0;
+        margin: 0;
+        overflow: visible;
+    }
+    .resume-content {
+        transform: none !important;
+    }
+    .scale-controls {
+        display: none;
+    }
+}
