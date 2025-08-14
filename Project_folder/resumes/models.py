@@ -68,8 +68,8 @@ class Education(models.Model):
     institution = models.CharField(max_length=255)
     degree = models.CharField(max_length=50, choices=DEGREE_CHOICES)
     field_of_study = models.CharField(max_length=255)
-    start_year = models.PositiveIntegerField()
-    end_year = models.PositiveIntegerField(blank=True, null=True)
+    start_year = models.CharField(max_length=7, blank=True, null=True)  # Stores as YYYY-MM
+    end_year = models.CharField(max_length=7, blank=True, null=True)
     currently_studying = models.BooleanField(default=False)
     gpa = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     percentage = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
