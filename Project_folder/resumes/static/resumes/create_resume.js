@@ -1,18 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('resumeForm');
     const previewContainer = document.getElementById('resumePreview');
