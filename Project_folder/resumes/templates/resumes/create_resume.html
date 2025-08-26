@@ -10,6 +10,37 @@
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="{% static 'resumes/create_resume.css' %}?v=2.0">
+<style>
+    #toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+    
+    .toast {
+        padding: 15px 20px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        color: white;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease-in-out;
+    }
+    
+    .toast.show {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .success-toast {
+        background-color: #28a745;
+    }
+    
+    .error-toast {
+        background-color: #dc3545;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -53,8 +84,10 @@
                 </div>
             </div>
 
-            <form id="resumeForm" method="post" action="{% url 'resumes:create_resume' %}" enctype="multipart/form-data" class="tab-content">
-                {% csrf_token %}
+            <form id="resumeForm" method="post" action="{% if resume %}{% url 'resumes:edit_resume' resume_id=resume.id %}{% else %}{% url 'resumes:create_resume' %}{% endif %}" enctype="multipart/form-data" class="tab-content">
+            {% csrf_token %}
+            <input type="hidden" name="resume_id" value="{{ resume.id|default:'' }}">
+            <input type="hidden" name="is_new" value="{% if not resume %}1{% endif %}">
                 
                 <!-- Basic Information Section -->
                 <div class="tab-pane fade show active" id="basic" role="tabpanel">
@@ -510,32 +543,30 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Form Actions -->
-                <div class="form-actions sticky-bottom bg-white p-3 border-top">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <button type="submit" class="btn btn-primary me-2">
-                                <i class="bi bi-save"></i> Save Resume
-                            </button>
-                            <button type="reset" class="btn btn-outline-secondary me-2">
-                                <i class="bi bi-arrow-counterclockwise"></i> Reset
-                            </button>
-                        </div>
-                        <div>
-                            {% if not creating_new %}
-                                <a href="{% url 'resumes:download_resume' resume.id %}" class="btn btn-success">
-                                    <i class="bi bi-download"></i> Download PDF
-                                </a>
-                            {% else %}
-                                <button class="btn btn-secondary" disabled title="Save the resume first">
-                                    <i class="bi bi-download"></i> Download PDF
-                                </button>
-                            {% endif %}
+                    <!-- Form Actions -->
+                    <div class="form-actions sticky-bottom p-3 border-top">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <span id="autoSaveIndicator" class="text-muted">
+                                    <i class="bi bi-check-circle text-success me-1"></i>
+                                    <small>Changes are saved automatically</small>
+                                </span>
+                            </div>
+                            <div>
+                                {% if not creating_new %}
+                                    <a href="{% url 'resumes:download_resume' resume.id %}" class="btn btn-success">
+                                        <i class="bi bi-download"></i> Download PDF
+                                    </a>
+                                {% else %}
+                                    <button class="btn btn-secondary" disabled title="Resume will be available to download after first auto-save">
+                                        <i class="bi bi-download"></i> Download PDF
+                                    </button>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </form>
         </div>
 
@@ -560,40 +591,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('resumeForm');
-        
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(form);
-            
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the form action with the new resume ID
-                    form.action = `/resumes/edit/${data.resume_id}/`;
-                    // Show success message
-                    alert('Resume saved successfully!');
-                } else {
-                    alert('Error saving resume: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while saving the resume');
-            });
-        });
-    });
-</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{% static 'resumes/create_resume.js' %}?v=2.0"></script>
+<script src="{% static 'resumes/auto-save.js' %}?v=2.0"></script>
 {% endblock %}
