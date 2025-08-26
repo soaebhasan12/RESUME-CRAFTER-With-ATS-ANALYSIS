@@ -1277,3 +1277,76 @@ body {
         display: none;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.saving-indicator {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #007bff;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        display: none;
+        z-index: 9999;
+    }
+
+    #toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+
+    .toast {
+        padding: 15px 20px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        color: white;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .toast.show {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .success-toast {
+        background-color: #28a745;
+    }
+
+    .error-toast {
+        background-color: #dc3545;
+    }
+
+    .saving-spinner {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        margin-right: 8px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
